@@ -38,7 +38,7 @@ if ($temperature > 30) {
 } else {
     echo "It's not too hot\n";
 }
-
+```
 
 The `if-else` statement provides two execution paths: one for when the  
 condition is true and another for when it's false. This ensures one  
