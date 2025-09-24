@@ -401,321 +401,401 @@ substitutes matched patterns with replacement text.
 
 ## File reading
 
-Reading content from files safely.  
+Reading content from files safely with error handling.  
 
-```raku
-# Read entire file
-if "/etc/hostname".IO.f {
-    my $content = "/etc/hostname".IO.slurp;
-    say "Hostname: $content.chomp()";
+```php
+<?php
+// Read entire file
+if (file_exists("/etc/hostname")) {
+    $content = file_get_contents("/etc/hostname");
+    echo "Hostname: " . trim($content) . PHP_EOL;
 }
 
-# Read line by line
-if "/etc/passwd".IO.f {
-    for "/etc/passwd".IO.lines[0..2] -> $line {
-        say "Line: $line";
+// Read line by line
+if (file_exists("/etc/passwd")) {
+    $lines = file("/etc/passwd", FILE_IGNORE_NEW_LINES);
+    for ($i = 0; $i < min(3, count($lines)); $i++) {
+        echo "Line: " . $lines[$i] . PHP_EOL;
     }
 }
 
-# Handle missing files
+// Handle missing files
 try {
-    my $data = "nonexistent.txt".IO.slurp;
-    CATCH {
-        default { say "File not found or error reading" }
-    }
+    $data = file_get_contents("nonexistent.txt");
+} catch (Exception $e) {
+    echo "File not found or error reading" . PHP_EOL;
 }
 ```
 
-The `.IO` method creates file objects with methods like `.slurp`  
-(read all), `.lines` (read lines), and `.f` (file exists check).  
-Use `try/CATCH` for error handling.  
+Use `file_exists()` to check file existence before reading.  
+`file_get_contents()` reads entire files, while `file()` reads  
+into array of lines. Combine with try/catch for error handling.  
 
 ## Exception handling
 
-Managing errors gracefully with try/CATCH blocks.  
+Managing errors gracefully with try/catch blocks.  
 
-```raku
-# Basic exception handling
+```php
+<?php
+// Basic exception handling
 try {
-    my $result = 10 / 0;  # Creates a Failure object
-    say $result;          # Accessing the Failure throws the exception
-    CATCH {
-        when X::Numeric::DivideByZero {
-            say "Cannot divide by zero!";
-        }
-        default {
-            say "Unknown error: $_";
-        }
+    $result = 10 / 0;  // Generates warning but returns INF
+    if (!is_finite($result)) {
+        throw new DivisionByZeroError("Cannot divide by zero!");
     }
+} catch (DivisionByZeroError $e) {
+    echo "Division error: " . $e->getMessage() . PHP_EOL;
+} catch (Exception $e) {
+    echo "Unknown error: " . $e->getMessage() . PHP_EOL;
 }
 
-# Multiple exception types
+// Multiple exception types
 try {
-    die "Custom error";
-    CATCH {
-        when X::AdHoc { say "Custom error caught" }
-        default { say "Other error: $_.message()" }
-    }
+    throw new InvalidArgumentException("Custom error");
+} catch (InvalidArgumentException $e) {
+    echo "Custom error caught: " . $e->getMessage() . PHP_EOL;
+} catch (Exception $e) {
+    echo "Other error: " . $e->getMessage() . PHP_EOL;
 }
 ```
 
-The `try/CATCH` construct handles exceptions. Different exception  
-types can be caught with specific when clauses. Use die to  
-throw custom exceptions. Note that operations like division by zero  
-return Failure objects, which only throw exceptions when accessed  
-(e.g., via say or assignment to another variable). This allows  
-deferred error handling.  
-
-
-
+The `try/catch` construct handles exceptions with specific exception  
+types. Use `throw` to raise custom exceptions. PHP has built-in  
+exception classes like `InvalidArgumentException` and custom ones  
+can be created by extending `Exception`.  
 ## Basic classes
 
-Creating simple classes with attributes and methods.  
+Creating simple classes with properties and methods.  
 
-```raku
+```php
+<?php
 class Person {
-    has $.name;
-    has $.age;
+    public function __construct(
+        public string $name,
+        public int $age
+    ) {}
     
-    method greet {
-        say "Hi, I'm $.name and I'm $.age years old";
+    public function greet() {
+        echo "Hi, I'm {$this->name} and I'm {$this->age} years old" . PHP_EOL;
     }
 }
 
-my $person = Person.new(name => "Alice", age => 30);
-$person.greet;           # Hi, I'm Alice and I'm 30 years old
-say $person.name;        # Alice
+$person = new Person(name: "Alice", age: 30);
+$person->greet();              // Hi, I'm Alice and I'm 30 years old
+echo $person->name . PHP_EOL;  // Alice
 ```
 
-Classes are defined with the `class` keyword. Attributes use `has`  
-with the `$.` twigil for read-only public access. Methods are  
-defined with the `method` keyword.  
+Classes are defined with the `class` keyword. PHP 8.0+ constructor  
+property promotion allows defining properties directly in the  
+constructor. Use `public`, `private`, or `protected` for visibility.  
 
 ## Method calls
 
-Different ways to call methods on objects.  
+Different ways to call methods on objects and strings.  
 
-```raku
-my $text = "hello world";
+```php
+<?php
+$text = "hello world";
 
-# Standard method calls
-say $text.uc;            # HELLO WORLD
-say $text.chars;         # 11
-say $text.words;         # (hello world)
-say $text.words.elems;   # 2
+// Standard method calls on strings
+echo strtoupper($text) . PHP_EOL;     // HELLO WORLD
+echo strlen($text) . PHP_EOL;         // 11
+$words = explode(' ', $text);
+echo count($words) . PHP_EOL;         // 2
 
-# Method chaining  
-say $text.uc.split(' ').join('-');  # HELLO-WORLD
+// Method chaining with objects
+class StringBuilder {
+    private string $str = "";
+    
+    public function append(string $text): self {
+        $this->str .= $text;
+        return $this;
+    }
+    
+    public function upper(): self {
+        $this->str = strtoupper($this->str);
+        return $this;
+    }
+    
+    public function toString(): string {
+        return $this->str;
+    }
+}
 
-# Indirect method calls
-say uc($text);           # HELLO WORLD (function style)
+$result = (new StringBuilder())
+    ->append("hello")
+    ->append(" ")
+    ->append("world")
+    ->upper()
+    ->toString();
+echo $result . PHP_EOL;  // HELLO WORLD
 ```
 
-Methods can be called with dot notation, chained together for  
-fluent interfaces, or used as functions. Chaining allows concise  
-transformation pipelines.  
+PHP uses function calls for string operations rather than methods.  
+Object method chaining requires returning `$this` from methods.  
+The `->` operator accesses object properties and methods.  
 
 ## Array operations
 
 Essential operations for working with arrays.  
 
-```raku
-my @numbers = 1, 3, 2, 5, 4;
+```php
+<?php
+$numbers = [1, 3, 2, 5, 4];
 
-say @numbers.sort;       # (1 2 3 4 5)
-say @numbers.reverse;    # (4 5 2 3 1)
-say @numbers.elems;      # 5 (count)
-say @numbers.sum;        # 15
-say @numbers.max;        # 5
-say @numbers.min;        # 1
+$sorted = $numbers;
+sort($sorted);                                // Sorts in place
+print_r($sorted);                             // [1, 2, 3, 4, 5]
+print_r(array_reverse($numbers));             // [4, 5, 2, 3, 1]
+echo count($numbers) . PHP_EOL;               // 5 (count)
+echo array_sum($numbers) . PHP_EOL;           // 15
+echo max($numbers) . PHP_EOL;                 // 5
+echo min($numbers) . PHP_EOL;                 // 1
 
-@numbers.push(6);        # Add to end
-@numbers.unshift(0);     # Add to beginning
-say @numbers;            # [0 1 3 2 5 4 6]
+$numbers[] = 6;                               // Add to end
+array_unshift($numbers, 0);                  // Add to beginning
+print_r($numbers);                            // [0, 1, 3, 2, 5, 4, 6]
 ```
 
-Arrays have many built-in methods for sorting, counting, finding  
-extrema, and modifying contents. These methods make array  
-manipulation concise and readable.  
+PHP provides extensive array functions for sorting, counting, finding  
+extrema, and modifying contents. Functions like `sort()`, `count()`,  
+`array_sum()`, and `max()`/`min()` handle common array operations  
+efficiently.  
 
-## Hash operations
+## Associative array operations
 
-Working with hash data structures efficiently.  
+Working with associative array data structures efficiently.  
 
-```raku
-my %scores = Alice => 95, Bob => 87, Carol => 92;
+```php
+<?php
+$scores = ["Alice" => 95, "Bob" => 87, "Carol" => 92];
 
-say %scores.keys;        # (Alice Bob Carol)
-say %scores.values;      # (95 87 92)
-say %scores.pairs;       # (Alice => 95 Bob => 87 Carol => 92)
+print_r(array_keys($scores));     // [Alice, Bob, Carol]
+print_r(array_values($scores));   // [95, 87, 92]
+foreach ($scores as $name => $score) {
+    echo "$name: $score" . PHP_EOL;
+}
 
-%scores<David> = 88;     # Add new key-value pair
-%scores<Alice>:delete;   # Remove a key
-
-say %scores.elems;       # 3 (count of pairs)
+$scores["David"] = 88;            // Add new key-value pair
+unset($scores["Alice"]);          // Remove a key
+echo count($scores) . PHP_EOL;    // 3 (count of pairs)
 ```
 
-Hashes provide methods to access keys, values, and pairs. Adding  
-and removing elements is straightforward with assignment and the  
-`:delete` adverb.  
+Associative arrays provide functions to access keys, values, and  
+pairs. Adding elements uses assignment, while `unset()` removes  
+elements. Use `foreach` to iterate over key-value pairs.  
 
 ## String interpolation
 
 Embedding expressions within strings for dynamic content.  
 
-```raku
-my $name = "Alice";
-my $age = 30;
-my @hobbies = "reading", "coding", "hiking";
+```php
+<?php
+$name = "Alice";
+$age = 30;
+$hobbies = ["reading", "coding", "hiking"];
 
-say "My name is $name";
-say "I am $age years old";
-say "Next year I'll be {$age + 1}";
-say "I have {+@hobbies} hobbies";
-say "My hobbies: {@hobbies.join(', ')}";
+echo "My name is $name" . PHP_EOL;
+echo "I am $age years old" . PHP_EOL;
+echo "Next year I'll be " . ($age + 1) . PHP_EOL;
+echo "I have " . count($hobbies) . " hobbies" . PHP_EOL;
+echo "My hobbies: " . implode(", ", $hobbies) . PHP_EOL;
+
+// Alternative with sprintf
+printf("My name is %s and I'm %d years old\n", $name, $age);
 ```
 
-String interpolation allows variables and expressions within double  
-quotes. Use curly braces `{}` for complex expressions or to  
-disambiguate variable boundaries.  
+String interpolation allows variables within double quotes. Complex  
+expressions require concatenation or curly braces `{$variable}`.  
+The `sprintf()` function provides formatted string output similar  
+to C-style formatting.  
 
-## Functional programming basics
+## Functional programming
 
-Using map, grep, and sort for data transformation.  
+Using array_map, array_filter, and array transformations.  
 
-```raku
-my @numbers = 1..10;
+```php
+<?php
+$numbers = range(1, 10);
 
-# Transform with map
-my @doubled = @numbers.map: * * 2;
-say @doubled;            # [2 4 6 8 10 12 14 16 18 20]
+// Transform with array_map
+$doubled = array_map(fn($x) => $x * 2, $numbers);
+print_r($doubled);                    // [2, 4, 6, 8, ..., 20]
 
-# Filter with grep
-my @evens = @numbers.grep: * %% 2;
-say @evens;              # [2 4 6 8 10]
+// Filter with array_filter
+$evens = array_filter($numbers, fn($x) => $x % 2 === 0);
+print_r(array_values($evens));        // [2, 4, 6, 8, 10]
 
-# Sort with custom criteria
-my @words = "apple", "Banana", "cherry";
-my @sorted = @words.sort: *.lc;
-say @sorted;             # [apple Banana cherry]
+// Sort with custom criteria
+$words = ["apple", "Banana", "cherry"];
+usort($words, fn($a, $b) => strcasecmp($a, $b));
+print_r($words);                      // [apple, Banana, cherry]
 ```
 
-Functional methods like `map`, `grep`, and `sort` transform data  
-without modifying original arrays. The whatever star `*` creates  
-anonymous functions for concise operations.  
+Functional methods like `array_map()`, `array_filter()`, and `usort()`  
+transform data without modifying original arrays. PHP 7.4+ arrow  
+functions `fn()` provide concise anonymous function syntax for  
+simple operations.  
 
 ## Type constraints
 
 Adding type safety with explicit type declarations.  
 
-```raku
-my Int $count = 10;
-my Str $message = "Hello";
-my Bool $active = True;
-my Rat $price = 19.99;
-
-# Function with typed parameters
-sub calculate-tax(Rat $amount, Rat $rate --> Rat) {
-    $amount * $rate;
+```php
+<?php
+// PHP 8.0+ typed properties
+class Calculator {
+    public function __construct(
+        private int $count = 10,
+        private string $message = "Hello",
+        private bool $active = true,
+        private float $price = 19.99
+    ) {}
+    
+    // Function with typed parameters and return type
+    public function calculateTax(float $amount, float $rate): float {
+        return $amount * $rate;
+    }
+    
+    public function getCount(): int {
+        return $this->count;
+    }
 }
 
-say calculate-tax(100.0, 0.08);  # 8
+$calc = new Calculator();
+echo $calc->calculateTax(100.0, 0.08) . PHP_EOL;  // 8
+echo $calc->getCount() . PHP_EOL;                 // 10
 
-# This would cause a type error:
-# $count = "not a number";
+// This would cause a TypeError:
+// $calc->calculateTax("not a number", 0.08);
 ```
 
-Type constraints ensure variables only accept values of specific  
-types. Function signatures can specify parameter and return types  
-for additional safety and documentation.  
+Type declarations ensure parameters and return values match specific  
+types. PHP 8.0+ supports union types, nullable types, and mixed  
+types for additional flexibility while maintaining type safety.  
 
-## Multiple dispatch
+## Method overloading alternatives
 
-Defining functions that behave differently based on parameter types.  
+Achieving flexible function behavior through different approaches.  
 
-```raku
-multi sub process(Int $n) {
-    say "Processing integer: $n";
+```php
+<?php
+// Using union types (PHP 8.0+)
+function process(int|string|array $input): string {
+    return match (gettype($input)) {
+        'integer' => "Processing integer: $input",
+        'string' => "Processing string: $input",
+        'array' => "Processing array with " . count($input) . " elements",
+        default => "Unknown type"
+    };
 }
 
-multi sub process(Str $s) {
-    say "Processing string: $s";
+echo process(42) . PHP_EOL;              // Processing integer: 42
+echo process("hello") . PHP_EOL;         // Processing string: hello
+echo process([1, 2, 3]) . PHP_EOL;       // Processing array with 3 elements
+
+// Alternative: function with optional parameters
+function connect(string $host = "localhost", int $port = 8080, bool $ssl = false): string {
+    return "Connecting to $host:$port (SSL: " . ($ssl ? "true" : "false") . ")";
 }
 
-multi sub process(@arr) {
-    say "Processing array with {+@arr} elements";
-}
-
-process(42);             # Processing integer: 42
-process("hello");        # Processing string: hello
-process([1, 2, 3]);      # Processing array with 3 elements
+echo connect() . PHP_EOL;
+echo connect("example.com", 443, true) . PHP_EOL;
 ```
 
-Multiple dispatch allows the same function name to have different  
-implementations based on the types or values of arguments. Raku  
-automatically selects the best matching candidate.  
+PHP doesn't have true method overloading, but union types and  
+optional parameters provide flexibility. The `match` expression  
+can dispatch based on argument types for polymorphic behavior.  
 
-## Slurpy parameters
+## Variadic parameters
 
 Functions that accept variable numbers of arguments.  
 
-```raku
-sub sum(*@numbers) {
-    @numbers.sum;
+```php
+<?php
+function sum(...$numbers): int|float {
+    return array_sum($numbers);
 }
 
-sub format-message($template, *@args) {
-    sprintf($template, |@args);
+function formatMessage(string $template, ...$args): string {
+    return sprintf($template, ...$args);
 }
 
-say sum(1, 2, 3, 4, 5);           # 15
-say sum();                        # 0
-say format-message("Hello %s, you have %d messages", "Alice", 5);
+echo sum(1, 2, 3, 4, 5) . PHP_EOL;           // 15
+echo sum() . PHP_EOL;                        // 0
+echo formatMessage("Hello %s, you have %d messages", "Alice", 5) . PHP_EOL;
+
+// Unpacking arrays
+$numbers = [10, 20, 30];
+echo sum(...$numbers) . PHP_EOL;             // 60
 ```
 
-Slurpy parameters use `*` to collect remaining arguments into an  
-array. This allows functions to accept flexible numbers of  
-arguments while maintaining type safety.  
+Variadic parameters use `...` to collect remaining arguments into an  
+array. The spread operator `...` can also unpack arrays into  
+function arguments, providing flexible parameter handling.  
 
 ## Named parameters
 
 Functions with labeled arguments for clarity and flexibility.  
 
-```raku
-sub create-user(:$name!, :$age = 18, :$active = True) {
-    say "User: $name, Age: $age, Active: $active";
+```php
+<?php
+// PHP 8.0+ named arguments
+function createUser(string $name, int $age = 18, bool $active = true): string {
+    return "User: $name, Age: $age, Active: " . ($active ? "true" : "false");
 }
 
-sub connect(:$host = "localhost", :$port = 8080, :$ssl = False) {
-    say "Connecting to $host:$port (SSL: $ssl)";
+function connect(string $host = "localhost", int $port = 8080, bool $ssl = false): string {
+    return "Connecting to $host:$port (SSL: " . ($ssl ? "true" : "false") . ")";
 }
 
-create-user(name => "Alice", age => 25);
-connect(host => "example.com", ssl => True);
-connect();  # Uses all defaults
+echo createUser(name: "Alice", age: 25) . PHP_EOL;
+echo connect(host: "example.com", ssl: true) . PHP_EOL;
+echo connect() . PHP_EOL;  // Uses all defaults
+
+// Named arguments can be passed in any order
+echo createUser(age: 30, name: "Bob") . PHP_EOL;
 ```
 
-Named parameters use `:$name` syntax. The `!` makes parameters  
-required, and `=` provides default values. Named parameters can  
-be passed in any order.  
+Named arguments (PHP 8.0+) use parameter names with colons for  
+clarity. They can be passed in any order and make function calls  
+more readable, especially with many optional parameters.  
 
 ## Command line arguments
 
-Accessing and processing arguments passed to your program.  
+Accessing and processing arguments passed to your script.  
 
-```raku
-sub MAIN($filename, :$verbose = False, :$count = 1) {
-    say "Processing file: $filename";
-    say "Verbose mode: $verbose" if $verbose;
-    say "Count: $count";
+```php
+<?php
+// Basic command line argument access
+if ($argc < 2) {
+    echo "Usage: php script.php <filename> [--verbose] [--count=N]" . PHP_EOL;
+    exit(1);
 }
 
-# Usage examples:
-# script.raku myfile.txt
-# script.raku myfile.txt --verbose
-# script.raku myfile.txt --count=5 --verbose
+$filename = $argv[1];
+$verbose = in_array("--verbose", $argv);
+$count = 1;
+
+// Parse named arguments
+foreach ($argv as $arg) {
+    if (str_starts_with($arg, "--count=")) {
+        $count = (int)substr($arg, 8);
+    }
+}
+
+echo "Processing file: $filename" . PHP_EOL;
+if ($verbose) {
+    echo "Verbose mode: enabled" . PHP_EOL;
+}
+echo "Count: $count" . PHP_EOL;
+
+// Usage examples:
+// php script.php myfile.txt
+// php script.php myfile.txt --verbose
+// php script.php myfile.txt --count=5 --verbose
 ```
 
-The `MAIN` subroutine automatically processes command line arguments.  
-Positional parameters become required arguments, and named parameters  
-become optional flags. Raku generates help text automatically.
+The `$argc` variable contains argument count and `$argv` contains  
+the argument array. Use `getopt()` for more sophisticated option  
+parsing or third-party libraries for complex CLI applications.  
