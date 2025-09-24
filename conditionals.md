@@ -18,7 +18,6 @@ $age = 18;
 if ($age >= 18) {
     echo "You are an adult\n";
 }
-?>
 ```
 
 The basic `if` statement executes code only when a condition evaluates  
@@ -39,9 +38,7 @@ if ($temperature > 30) {
 } else {
     echo "It's not too hot\n";
 }
-?>
 
-```
 
 The `if-else` statement provides two execution paths: one for when the  
 condition is true and another for when it's false. This ensures one  
@@ -65,8 +62,6 @@ if ($grade >= 90) {
 } else {
     echo "Needs improvement\n";
 }
-?>
-
 ```
 
 The `elseif` chain allows testing multiple conditions sequentially.  
@@ -99,8 +94,6 @@ if ($user_age >= 18) {
 } else {
     echo "Must be 18 or older\n";
 }
-?>
-
 ```
 
 Nested conditionals allow checking multiple related conditions step by  
@@ -121,8 +114,6 @@ echo "Result: $result\n";
 // Multiple ternary operators
 $grade = ($score >= 90) ? "A" : (($score >= 80) ? "B" : "C");
 echo "Grade: $grade\n";
-?>
-
 ```
 
 The ternary operator `condition ? value_if_true : value_if_false`  
@@ -150,8 +141,6 @@ echo "Timeout: $timeout seconds\n";
 // Null coalescing assignment (PHP 7.4+)
 $config['cache'] ??= true;
 echo "Cache enabled: " . ($config['cache'] ? 'Yes' : 'No') . "\n";
-?>
-
 ```
 
 The null coalescing operator `??` returns the right operand when the  
@@ -187,8 +176,6 @@ $day_type = match($day) {
 };
 
 echo "Day type: $day_type\n";
-?>
-
 ```
 
 The `match` expression (PHP 8+) provides strict comparison and returns  
@@ -230,8 +217,6 @@ switch ($operation) {
     default:
         echo "Unknown operation\n";
 }
-?>
-
 ```
 
 Switch statements compare a variable against multiple values using  
@@ -271,8 +256,6 @@ switch ($month) {
     default:
         echo "Invalid month\n";
 }
-?>
-
 ```
 
 Intentional fall-through allows multiple cases to execute the same  
@@ -308,8 +291,6 @@ if (!$has_job) {
 } else {
     echo "Employment status: Active\n";
 }
-?>
-
 ```
 
 Logical operators `&&` (AND), `||` (OR), and `!` (NOT) combine boolean  
@@ -352,8 +333,6 @@ if ($x < $z) {
 if ($z >= $x) {
     echo "z is greater than or equal to x\n";
 }
-?>
-
 ```
 
 PHP provides loose (`==`, `!=`) and strict (`===`, `!==`) comparison  
@@ -390,8 +369,6 @@ $value = "test";
 if (gettype($value) === "string") {
     echo "Confirmed string type\n";
 }
-?>
-
 ```
 
 Type checking functions like `is_int()`, `is_string()`, and `is_null()`  
@@ -438,8 +415,6 @@ if (isset($count) && !empty($count)) {
 // null coalescing for default values
 $display_count = $count ?? "N/A";
 echo "Display count: $display_count\n";
-?>
-
 ```
 
 The `isset()` function checks variable existence and non-null status.  
@@ -484,8 +459,6 @@ if (str_starts_with($password, "secret")) {
 if (str_contains($password, "123")) {
     echo "Password contains numbers\n";
 }
-?>
-
 ```
 
 String comparison in PHP is case-sensitive by default. Use functions  
@@ -530,8 +503,6 @@ $score = 85;
 if ($score >= 0 && $score <= 100) {
     echo "Score is within valid range\n";
 }
-?>
-
 ```
 
 PHP automatically converts strings to numbers in numeric contexts.  
@@ -581,8 +552,6 @@ foreach ($numbers as $num) {
 if ($all_positive) {
     echo "All numbers are positive\n";
 }
-?>
-
 ```
 
 Array condition checks include testing for emptiness with `empty()`,  
@@ -635,8 +604,6 @@ if (has_permission("admin")) {
 // Converting to boolean
 $status = $user_count ? true : false;
 echo "Status as boolean: " . ($status ? "true" : "false") . "\n";
-?>
-
 ```
 
 PHP treats various values as "falsy": false, 0, 0.0, "", "0", null,  
@@ -681,8 +648,6 @@ echo "\nNo short-circuit example:\n";
 if (quick_check() && expensive_operation()) {
     echo "Both conditions checked\n";
 }
-?>
-
 ```
 
 Short-circuit evaluation stops evaluating logical expressions once  
@@ -728,8 +693,6 @@ usort($strings, function($a, $b) {
 });
 
 echo "Sorted strings: " . implode(", ", $strings) . "\n";
-?>
-
 ```
 
 The spaceship operator `<=>` returns -1, 0, or 1 for less than,  
@@ -781,8 +744,6 @@ if (($weekend || $holiday) && !$urgent) {
 } else {
     echo "Work needs attention now\n";
 }
-?>
-
 ```
 
 Complex conditions benefit from clear grouping with parentheses and  
@@ -862,8 +823,6 @@ function check_eligibility($user) {
 }
 
 echo check_eligibility($user) . "\n";
-?>
-
 ```
 
 Deep nesting makes code hard to read and maintain. Consider using  
@@ -919,8 +878,6 @@ $status_messages = [
 $http_code = 404;
 $message = $status_messages[$http_code] ?? 'Unknown Status';
 echo "HTTP Status: $message\n";
-?>
-
 ```
 
 Conditional assignment patterns include ternary operators for simple  
@@ -981,8 +938,6 @@ $invalid_order = [
 echo process_order($valid_order) . "\n";
 echo process_order($invalid_order) . "\n";
 echo process_order([]) . "\n";
-?>
-
 ```
 
 Guard clauses use early returns to handle invalid conditions first,  
@@ -1056,8 +1011,6 @@ echo "Discount: $" . calculate_discount('regular', 50, false) . "\n";
 
 echo validate_password("weak") . "\n";
 echo validate_password("StrongPass123!") . "\n";
-?>
-
 ```
 
 Early returns eliminate deeply nested conditions by handling special  
@@ -1145,8 +1098,6 @@ echo "Test 3: Locked account\n";
 $result = transfer_funds($account_a, $account_c, 100);
 echo $result['success'] ? $result['message'] : $result['error'];
 echo "\n";
-?>
-
 ```
 
 Exception-based conditionals separate error handling from main logic  
