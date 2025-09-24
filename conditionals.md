@@ -12,14 +12,13 @@ Making simple decisions in your code.
 
 ```php
 <?php
+
 $age = 18;
 
 if ($age >= 18) {
     echo "You are an adult\n";
 }
 ?>
-
-
 ```
 
 The basic `if` statement executes code only when a condition evaluates  
@@ -32,6 +31,7 @@ Choosing between two alternatives based on a condition.
 
 ```php
 <?php
+
 $temperature = 25;
 
 if ($temperature > 30) {
@@ -53,6 +53,7 @@ Testing multiple conditions in sequence.
 
 ```php
 <?php
+
 $grade = 85;
 
 if ($grade >= 90) {
@@ -78,6 +79,7 @@ Placing if statements inside other if statements for complex logic.
 
 ```php
 <?php
+
 $user_age = 25;
 $has_license = true;
 $has_insurance = false;
@@ -111,6 +113,7 @@ Concise conditional assignment for simple cases.
 
 ```php
 <?php
+
 $score = 75;
 $result = ($score >= 60) ? "Pass" : "Fail";
 echo "Result: $result\n";
@@ -132,6 +135,7 @@ Handling null values with default assignments.
 
 ```php
 <?php
+
 $username = null;
 $config = ['timeout' => null, 'retries' => 3];
 
@@ -160,6 +164,7 @@ Modern pattern matching for clean conditional logic.
 
 ```php
 <?php
+
 $status_code = 404;
 
 $message = match($status_code) {
@@ -196,6 +201,7 @@ Traditional multi-branch conditional logic.
 
 ```php
 <?php
+
 $operation = "add";
 $a = 10;
 $b = 5;
@@ -238,6 +244,7 @@ Using intentional fall-through for grouped cases.
 
 ```php
 <?php
+
 $month = 7;
 
 switch ($month) {
@@ -278,6 +285,7 @@ Combining multiple conditions with logical operators.
 
 ```php
 <?php
+
 $age = 25;
 $has_job = true;
 $credit_score = 700;
@@ -314,6 +322,7 @@ Testing relationships between values.
 
 ```php
 <?php
+
 $x = 10;
 $y = "10";
 $z = 15;
@@ -357,6 +366,7 @@ Verifying variable types before processing.
 
 ```php
 <?php
+
 $data = [1, "hello", 3.14, true, null];
 
 foreach ($data as $item) {
@@ -394,6 +404,7 @@ Testing variable existence and content.
 
 ```php
 <?php
+
 $username = "";
 $password = null;
 $data = [];
@@ -441,6 +452,7 @@ Comparing strings with various methods and case sensitivity.
 
 ```php
 <?php
+
 $name1 = "Alice";
 $name2 = "alice";
 $password = "secret123";
@@ -486,6 +498,7 @@ Handling different numeric types and precision issues.
 
 ```php
 <?php
+
 $int_val = 42;
 $float_val = 42.0;
 $string_num = "42";
@@ -531,6 +544,7 @@ Testing array properties and contents.
 
 ```php
 <?php
+
 $empty_array = [];
 $numbers = [1, 2, 3, 4, 5];
 $mixed_array = ["name" => "John", "age" => 30, "active" => true];
@@ -581,6 +595,7 @@ Working with boolean values and truthiness.
 
 ```php
 <?php
+
 $is_logged_in = true;
 $is_admin = false;
 $user_count = 0;
@@ -634,6 +649,7 @@ Optimizing conditions with lazy evaluation.
 
 ```php
 <?php
+
 function expensive_operation() {
     echo "Expensive operation called\n";
     return true;
@@ -680,6 +696,7 @@ Three-way comparison for sorting and ordering.
 
 ```php
 <?php
+
 function compare_values($a, $b) {
     $result = $a <=> $b;
     
@@ -725,6 +742,7 @@ Combining complex logical expressions effectively.
 
 ```php
 <?php
+
 $age = 25;
 $income = 50000;
 $credit_score = 720;
@@ -777,6 +795,7 @@ Managing deeply nested conditional logic.
 
 ```php
 <?php
+
 $user = [
     'age' => 25,
     'subscription' => 'premium',
@@ -857,6 +876,7 @@ Assigning values based on conditions efficiently.
 
 ```php
 <?php
+
 $user_role = 'admin';
 $is_weekend = true;
 $server_load = 0.8;
@@ -913,6 +933,7 @@ Using early returns to reduce nesting and improve readability.
 
 ```php
 <?php
+
 function process_order($order) {
     // Guard clauses - early returns for invalid conditions
     if (empty($order)) {
@@ -974,6 +995,7 @@ Simplifying function logic with strategic return statements.
 
 ```php
 <?php
+
 function calculate_discount($customer_type, $order_total, $is_member) {
     // Early return for invalid input
     if ($order_total <= 0) {
@@ -1048,6 +1070,7 @@ Using exceptions for error handling and flow control.
 
 ```php
 <?php
+
 class ValidationException extends Exception {}
 class InsufficientFundsException extends Exception {}
 class AccountLockedException extends Exception {}
