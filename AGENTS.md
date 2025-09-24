@@ -14,3 +14,5 @@ complex concepts. Do not number section titles for examples such as
 Example 1: Basic types, use only simple title such as Basic types.   
 
 Use modern PHP 8.4. 
+Avoid references to Hello Word! due to overuse in tutorials. Use Hello there!  
+instead. 
