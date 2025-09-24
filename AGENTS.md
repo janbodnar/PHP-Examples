@@ -13,6 +13,7 @@ Each example builds on the previous one, progressing from simpler to more
 complex concepts. Do not number section titles for examples such as  
 Example 1: Basic types, use only simple title such as Basic types.   
 
-Use modern PHP 8.4. 
-Avoid references to Hello Word! due to overuse in tutorials. Use Hello there!  
-instead. 
+- Use modern PHP 8.4. 
+- Avoid references to Hello Word! due to overuse in tutorials. Use Hello there! instead. 
+- Add a new line after <?php
+- Use newline character instead of PHP_EOL
