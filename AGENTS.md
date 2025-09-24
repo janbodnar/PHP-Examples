@@ -12,3 +12,5 @@ max 80 chars per line, terminated with two spaces.
 Each example builds on the previous one, progressing from simpler to more  
 complex concepts. Do not number section titles for examples such as  
 Example 1: Basic types, use only simple title such as Basic types.   
+
+Use modern PHP 8.4. 
