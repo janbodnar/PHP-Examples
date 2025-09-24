@@ -146,235 +146,258 @@ with `"$variable"` is often more readable than concatenation.
 
 Comparing values for equality and ordering.  
 
-```raku
-my $x = 10;
-my $y = 20;
-my $str = "hello";
+```php
+<?php
+$x = 10;
+$y = 20;
+$str = "hello";
 
-say $x == $y;            # False (numeric equality)
-say $x != $y;            # True (numeric inequality)  
-say $x < $y;             # True (less than)
-say $x > $y;             # False (greater than)
-say $str eq "hello";     # True (string equality)
-say $str ne "world";     # True (string inequality)
+echo ($x == $y) ? "true" : "false" . PHP_EOL;    // false (equality)
+echo ($x != $y) ? "true" : "false" . PHP_EOL;    // true (inequality)
+echo ($x < $y) ? "true" : "false" . PHP_EOL;     // true (less than)
+echo ($x > $y) ? "true" : "false" . PHP_EOL;     // false (greater than)
+echo ($str == "hello") ? "true" : "false" . PHP_EOL;  // true (equality)
+echo ($str != "world") ? "true" : "false" . PHP_EOL;  // true (inequality)
 ```
 
-Use `==` and `!=` for numeric comparisons, `eq` and `ne` for string  
-comparisons. The `<`, `>`, `<=`, `>=` operators work for both  
-numbers and strings (lexicographic order).  
+Use `==` and `!=` for loose comparisons, `===` and `!==` for strict  
+type and value comparisons. The `<`, `>`, `<=`, `>=` operators work  
+for both numbers and strings (lexicographic order).  
 
 ## Logical operators
 
 Combining boolean expressions with logical operations.  
 
-```raku
-my $a = True;
-my $b = False;
-my $x = 10;
+```php
+<?php
+$a = true;
+$b = false;
+$x = 10;
 
-say ($a and $b);         # False
-say ($a or $b);          # True  
-say not $a;              # False
-say $a && $b;            # False (alternative syntax)
-say $a || $b;            # True (alternative syntax)
-say $x > 5 && $x < 15;   # True (combining conditions)
+echo ($a && $b) ? "true" : "false" . PHP_EOL;    // false (AND)
+echo ($a || $b) ? "true" : "false" . PHP_EOL;    // true (OR)
+echo (!$a) ? "true" : "false" . PHP_EOL;         // false (NOT)
+echo ($a and $b) ? "true" : "false" . PHP_EOL;   // false (lower precedence)
+echo ($a or $b) ? "true" : "false" . PHP_EOL;    // true (lower precedence)
+echo ($x > 5 && $x < 15) ? "true" : "false" . PHP_EOL;  // true
 ```
 
-Logical operators `and`/`&&`, `or`/`||`, and `not`/`!` combine  
-boolean values. The word forms have lower precedence than symbolic  
-forms, useful for control flow.  
+Logical operators `&&`/`and`, `||`/`or`, and `!`/`not` combine boolean  
+values. The word forms have lower precedence than symbolic forms,  
+useful for assignment and control flow operations.  
 
 ## Conditional statements
 
-Making decisions in your code with if/elsif/else.  
+Making decisions in your code with if/elseif/else.  
 
-```raku
-my $score = 85;
+```php
+<?php
+$score = 85;
 
-if $score >= 90 {
-    say "Excellent!";
-} elsif $score >= 70 {
-    say "Good job!";
+if ($score >= 90) {
+    echo "Excellent!" . PHP_EOL;
+} elseif ($score >= 70) {
+    echo "Good job!" . PHP_EOL;
 } else {
-    say "Keep trying!";
+    echo "Keep trying!" . PHP_EOL;
 }
 
-# Postfix conditional
-say "High score!" if $score > 80;
+// Ternary conditional
+echo ($score > 80) ? "High score!" : "Try harder!" . PHP_EOL;
 ```
 
 Conditional statements control program flow based on boolean  
-expressions. Postfix conditionals provide a concise way to execute  
-single statements conditionally.  
+expressions. The ternary operator `? :` provides a concise way for  
+simple conditional assignments and output.  
 
 ## For loops
 
 Iterating over sequences and collections.  
 
-```raku
-# Loop over range
-for 1..5 -> $i {
-    say "Number: $i";
+```php
+<?php
+// Loop over range
+for ($i = 1; $i <= 5; $i++) {
+    echo "Number: $i" . PHP_EOL;
 }
 
-# Loop over array
-my @colors = "red", "green", "blue";
-for @colors -> $color {
-    say "Color: $color";
+// Loop over array
+$colors = ["red", "green", "blue"];
+foreach ($colors as $color) {
+    echo "Color: $color" . PHP_EOL;
 }
 
-# Loop with index
-for @colors.kv -> $index, $value {
-    say "$index: $value";
+// Loop with index
+foreach ($colors as $index => $value) {
+    echo "$index: $value" . PHP_EOL;
 }
 ```
 
-For loops use the arrow syntax `->` to declare loop variables.  
-The `.kv` method provides both keys (indices) and values for  
-simultaneous iteration.  
+For loops use C-style syntax with initialization, condition, and  
+increment. The `foreach` loop iterates over arrays, optionally  
+providing both keys and values for simultaneous access.  
 
 ## While loops
 
 Repeating code while a condition is true.  
 
-```raku
-my $count = 0;
-while $count < 5 {
-    say "Count: $count";
+```php
+<?php
+$count = 0;
+while ($count < 5) {
+    echo "Count: $count" . PHP_EOL;
     $count++;
 }
 
-# Until loop (opposite of while)
-my $num = 10;
-until $num <= 0 {
-    say $num;
+// Do-while loop (executes at least once)
+$num = 10;
+do {
+    echo $num . PHP_EOL;
     $num -= 2;
+} while ($num > 0);
+```
+
+While loops continue executing while the condition is true. Do-while  
+loops execute the body at least once before checking the condition.  
+Both increment/decrement variables to avoid infinite loops.  
+
+## Loop control
+
+Controlling loop execution with break and continue statements.  
+
+```php
+<?php
+for ($i = 0; $i < 10; $i++) {
+    if ($i === 5) {
+        break;  // Exit loop completely
+    }
+    if ($i % 2 === 0) {
+        continue;  // Skip to next iteration
+    }
+    echo "Odd number: $i" . PHP_EOL;
+}
+
+// Infinite loop with explicit exit
+while (true) {
+    $input = readline("Enter 'quit' to exit: ");
+    if ($input === 'quit') {
+        break;
+    }
+    echo "You entered: $input" . PHP_EOL;
 }
 ```
 
-While loops continue executing while the condition is true. Until  
-loops continue while the condition is false. Both check the condition  
-before each iteration.  
-
-## Loop statement
-
-The general-purpose loop construct with initialization, condition, and increment.  
-
-```raku
-loop (my $i = 0; $i < 5; $i++) {
-    say "Iteration: $i";
-}
-
-# Infinite loop with explicit exit
-loop {
-    my $input = prompt("Enter 'quit' to exit: ");
-    last if $input eq 'quit';
-    say "You entered: $input";
-}
-```
-
-The `loop` statement provides C-style loop syntax with three parts:  
-initialization, condition, and increment. Use `last` to exit loops  
-early and `next` to skip to the next iteration.  
+The `break` statement exits loops early, while `continue` skips to  
+the next iteration. These provide fine control over loop execution  
+and are essential for interactive or conditional processing.  
 
 ## Ranges
 
 Generating sequences of consecutive values.  
 
-```raku
-my $range1 = 1..10;      # 1 to 10 inclusive
-my $range2 = 1^..^10;    # 1 to 10 exclusive
-my $range3 = 'a'..'z';   # letters a to z
+```php
+<?php
+$range1 = range(1, 10);         // 1 to 10 inclusive
+$range2 = range(1, 10, 2);      // 1, 3, 5, 7, 9 (step of 2)
+$range3 = range('a', 'z');      // letters a to z
 
-say $range1.list;        # (1 2 3 4 5 6 7 8 9 10)
-say $range2.list;        # (2 3 4 5 6 7 8 9)
-say $range3[0..2];       # (a b c)
+print_r(array_slice($range1, 0, 5));  // First 5 elements
+print_r($range2);                     // Odd numbers 1-9
+echo $range3[0] . $range3[1] . $range3[2] . PHP_EOL;  // abc
 
-for 1..3 -> $n { say $n }  # Use directly in loops
+// Use directly in loops
+foreach (range(1, 3) as $n) {
+    echo $n . PHP_EOL;
+}
 ```
 
-Ranges represent sequences between two endpoints. Use `..` for  
-inclusive ranges, `^..` to exclude the start, `..^` to exclude  
-the end, and `^..^` to exclude both endpoints.  
+The `range()` function generates arrays of consecutive values between  
+two endpoints. It supports numeric and alphabetic ranges, with  
+optional step parameter for custom increments.  
 
-## Basic subroutines
+## Basic functions
 
 Creating reusable functions to organize code.  
 
-```raku
-sub greet($name) {
+```php
+<?php
+function greet($name) {
     return "Hello, $name!";
 }
 
-sub add($a, $b) {
-    $a + $b;    # implicit return
+function add($a, $b) {
+    return $a + $b;
 }
 
-sub say-hello {
-    say "Hello from subroutine!";
+function sayHello() {
+    echo "Hello from function!" . PHP_EOL;
 }
 
-say greet("Alice");      # Hello, Alice!
-say add(5, 3);           # 8
-say-hello;               # Hello from subroutine!
+echo greet("Alice") . PHP_EOL;     // Hello, Alice!
+echo add(5, 3) . PHP_EOL;          // 8
+sayHello();                        // Hello from function!
 ```
 
-Subroutines encapsulate reusable code. Parameters are listed in  
-parentheses, and the last expression is automatically returned.  
-Explicit `return` statements are optional.  
+Functions encapsulate reusable code and are defined with the  
+`function` keyword. Parameters are listed in parentheses, and  
+`return` statements provide output values to the caller.  
 
-## Pattern matching with given/when
+## Pattern matching with match
 
-Elegant alternative to long if/elsif chains.  
+Elegant alternative to long if/elseif chains using PHP 8.0+ match.  
 
-```raku
-my $day = "Monday";
+```php
+<?php
+$day = "Monday";
 
-given $day {
-    when "Monday"    { say "Start of work week" }
-    when "Friday"    { say "TGIF!" }
-    when "Saturday" | "Sunday" { say "Weekend!" }
-    default          { say "Regular day" }
-}
+$message = match ($day) {
+    "Monday" => "Start of work week",
+    "Friday" => "TGIF!",
+    "Saturday", "Sunday" => "Weekend!",
+    default => "Regular day"
+};
+echo $message . PHP_EOL;
 
-# Pattern matching with numbers
-my $num = 42;
-given $num {
-    when 0..10   { say "Small number" }
-    when 11..100 { say "Medium number" }
-    default      { say "Large number" }
-}
+// Pattern matching with numbers
+$num = 42;
+$category = match (true) {
+    $num >= 0 && $num <= 10 => "Small number",
+    $num >= 11 && $num <= 100 => "Medium number",
+    default => "Large number"
+};
+echo $category . PHP_EOL;
 ```
 
-The `given/when` construct provides powerful pattern matching.  
-Each `when` clause can match values, ranges, types, or complex  
-patterns using smart matching.  
+The `match` expression (PHP 8.0+) provides powerful pattern matching.  
+It performs strict comparison and supports multiple values per arm.  
+Unlike switch, match is an expression that returns values.  
 
-## Regular expressions basics
+## Regular expressions
 
 Pattern matching and text processing with regex.  
 
-```raku
-my $text = "The year 2023 was great";
+```php
+<?php
+$text = "The year 2023 was great";
 
-# Basic matching
-if $text ~~ /\d+/ {
-    say "Found numbers: $/";
+// Basic matching
+if (preg_match('/\d+/', $text, $matches)) {
+    echo "Found numbers: " . $matches[0] . PHP_EOL;
 }
 
-# Capture groups
-if $text ~~ /year \s+ (\d+)/ {
-    say "Year: $0";          # 2023
+// Capture groups
+if (preg_match('/year\s+(\d+)/', $text, $matches)) {
+    echo "Year: " . $matches[1] . PHP_EOL;  // 2023
 }
 
-# Substitution
-my $new_text = $text.subst(/\d+/, "2024");
-say $new_text;               # The year 2024 was great
+// Substitution
+$newText = preg_replace('/\d+/', "2024", $text);
+echo $newText . PHP_EOL;  // The year 2024 was great
 ```
 
-Regular expressions use the `~~` operator for matching. Captures are  
-stored in `$/` (full match) and `$0`, `$1`, etc. (groups). The  
-`.subst` method replaces matched patterns.  
+Regular expressions use `preg_match()` for matching and store  
+captures in the `$matches` array. The `preg_replace()` function  
+substitutes matched patterns with replacement text.  
 
 ## File reading
 
