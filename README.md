@@ -25,3 +25,5 @@ sudo apt install php8.4-simplexml
 sudo apt install php8.4-sqlite3
 sudo apt install php8.4-pgsql
 ```
+
+PHP ini at `/etc/php/8.4/cli/php.ini`
