@@ -13,6 +13,7 @@ Creating simple functions with parameters and return values.
 
 ```php
 <?php
+
 function greet($name) {
     return "Hello, $name!";
 }
@@ -40,6 +41,7 @@ Providing default values for function parameters.
 
 ```php
 <?php
+
 function createUser($name, $role = 'user', $active = true) {
     return [
         'name' => $name,
@@ -68,6 +70,7 @@ Enforcing parameter and return types for better code safety.
 
 ```php
 <?php
+
 function calculateArea(float $width, float $height): float {
     return $width * $height;
 }
@@ -95,6 +98,7 @@ Using variadic functions to accept unlimited parameters.
 
 ```php
 <?php
+
 function sum(...$numbers): int|float {
     return array_sum($numbers);
 }
@@ -126,6 +130,7 @@ Using named arguments for clearer function calls.
 
 ```php
 <?php
+
 function connectDatabase(
     string $host,
     int $port = 3306,
@@ -170,6 +175,7 @@ Functions accepting multiple types using union type declarations.
 
 ```php
 <?php
+
 function processValue(int|string|array $value): string {
     return match(gettype($value)) {
         'integer' => "Processing integer: $value",
@@ -207,6 +213,7 @@ Creating functions without names and capturing variables from scope.
 
 ```php
 <?php
+
 $multiplier = 3;
 
 $calculate = function($x, $y) use ($multiplier) {
@@ -237,6 +244,7 @@ Concise syntax for simple anonymous functions.
 
 ```php
 <?php
+
 $numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 $doubled = array_map(fn($x) => $x * 2, $numbers);
@@ -269,6 +277,7 @@ Functions that accept other functions as parameters or return functions.
 
 ```php
 <?php
+
 function applyOperation(array $numbers, callable $operation): array {
     return array_map($operation, $numbers);
 }
@@ -306,6 +315,7 @@ Functions that call themselves to solve problems iteratively.
 
 ```php
 <?php
+
 function factorial(int $n): int {
     if ($n <= 1) {
         return 1;
@@ -350,6 +360,7 @@ Understanding variable scope and accessing global variables in functions.
 
 ```php
 <?php
+
 $globalVar = "I'm global";
 $counter = 0;
 
@@ -395,6 +406,7 @@ Preserving variable values between function calls.
 
 ```php
 <?php
+
 function generateId(): int {
     static $id = 0;
     return ++$id;
@@ -452,6 +464,7 @@ Passing parameters by reference to modify original variables.
 
 ```php
 <?php
+
 function swap(&$a, &$b): void {
     $temp = $a;
     $a = $b;
@@ -504,6 +517,7 @@ Creating memory-efficient iterators using yield.
 
 ```php
 <?php
+
 function generateNumbers(int $start, int $end, int $step = 1): Generator {
     for ($i = $start; $i <= $end; $i += $step) {
         yield $i;
@@ -564,6 +578,7 @@ Using functions as parameters for flexible behavior.
 
 ```php
 <?php
+
 function processData(array $data, callable $validator, callable $transformer): array {
     $result = [];
     
@@ -635,6 +650,7 @@ Leveraging PHP's extensive string manipulation capabilities.
 
 ```php
 <?php
+
 function analyzeText(string $text): array {
     return [
         'length' => strlen($text),
@@ -699,6 +715,7 @@ Utilizing PHP's powerful array processing capabilities.
 
 ```php
 <?php
+
 function processNumbers(array $numbers): array {
     return [
         'original' => $numbers,
@@ -788,6 +805,7 @@ Using PHP's mathematical functions for calculations and number processing.
 
 ```php
 <?php
+
 function calculateStatistics(array $values): array {
     $count = count($values);
     $sum = array_sum($values);
@@ -889,6 +907,7 @@ Working with dates, times, and temporal calculations.
 
 ```php
 <?php
+
 function formatDates(): void {
     $now = new DateTime();
     $timestamp = time();
@@ -981,6 +1000,7 @@ Reading, writing, and manipulating files and directories.
 
 ```php
 <?php
+
 function fileOperations(string $filename): array {
     $info = [];
     
@@ -1118,6 +1138,7 @@ Implementing robust error handling and exception management.
 
 ```php
 <?php
+
 function divideWithValidation(float $dividend, float $divisor): float {
     if ($divisor === 0.0) {
         throw new InvalidArgumentException("Division by zero is not allowed");
@@ -1256,6 +1277,7 @@ Writing comprehensive documentation for functions using DocBlock format.
 
 ```php
 <?php
+
 /**
  * Calculates the compound interest for an investment
  * 
