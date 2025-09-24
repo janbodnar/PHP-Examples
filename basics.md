@@ -1,8 +1,8 @@
 # Basics
 
-This chapter covers 30 fundamental Raku examples designed to help you get  
+This chapter covers 30 fundamental PHP examples designed to help you get  
 started with the language quickly. These examples demonstrate the most  
-common Raku syntax and idioms, progressing from simple concepts to more  
+common PHP syntax and idioms, progressing from simple concepts to more  
 sophisticated features. Each example includes clear explanations to help  
 you understand the underlying concepts and apply them in your own code.  
 
@@ -10,127 +10,136 @@ you understand the underlying concepts and apply them in your own code.
 
 The traditional first program in any language.  
 
-```raku
-say "Hello, World!";
+```php
+<?php
+echo "Hello, World!" . PHP_EOL;
 ```
 
-The `say` function outputs text followed by a newline. It's one of the  
-most commonly used functions in Raku for displaying output.  
+The `echo` statement outputs text. `PHP_EOL` provides a platform-  
+independent newline. PHP scripts start with `<?php` tag when mixing  
+with HTML, though it's optional in pure PHP files.  
 
-## Variables with sigils
+## Variables
 
-Raku uses sigils to indicate variable container types.  
+PHP variables are prefixed with the dollar sign ($).  
 
-```raku
-my $name = "Alice";      # Scalar variable
-my @colors = "red", "green", "blue";  # Array variable  
-my %person = name => "Bob", age => 25;  # Hash variable
+```php
+<?php
+$name = "Alice";         // String variable
+$colors = ["red", "green", "blue"];  // Indexed array
+$person = ["name" => "Bob", "age" => 25];  // Associative array
 
-say $name;
-say @colors[1];          # green
-say %person<name>;       # Bob
+echo $name . PHP_EOL;
+echo $colors[1] . PHP_EOL;    // green
+echo $person["name"] . PHP_EOL;  // Bob
 ```
 
-Sigils (`$`, `@`, `%`) make variable types visually distinct and help  
-the compiler optimize code. Scalars hold single values, arrays hold  
-ordered lists, and hashes hold key-value pairs.  
+All PHP variables use the `$` prefix regardless of type. Arrays can be  
+indexed (numeric keys) or associative (string keys). PHP is  
+dynamically typed, so variables can hold different types.  
 
 ## Basic data types
 
-Raku's fundamental data types for different kinds of values.  
+PHP's fundamental data types for different kinds of values.  
 
-```raku
-my $text = "Hello";      # Str
-my $number = 42;         # Int
-my $decimal = 3.14;      # Rat (rational number)
-my $flag = True;         # Bool
-my $nothing = Nil;       # Nil (absence of value)
+```php
+<?php
+$text = "Hello";         // string
+$number = 42;            // int
+$decimal = 3.14;         // float
+$flag = true;            // bool
+$nothing = null;         // null
 
-say $text.WHAT;          # (Str)
-say $number.WHAT;        # (Int)
-say $decimal.WHAT;       # (Rat)
+var_dump($text);         // string(5) "Hello"
+var_dump($number);       // int(42)
+var_dump($decimal);      // float(3.14)
 ```
 
-The `.WHAT` method shows the type of any value. Raku has rich type  
-system but allows you to start without explicit type declarations.  
+The `var_dump()` function shows detailed type and value information.  
+PHP has dynamic typing but provides functions like `gettype()` and  
+`is_*()` family for type checking when needed.  
 
 ## Array creation and access
 
 Different ways to create and access array elements.  
 
-```raku
-my @fruits = "apple", "banana", "cherry";
-my @numbers = 1, 2, 3, 4, 5;
-my @mixed = "text", 42, True;
-my @range = 1..10;
+```php
+<?php
+$fruits = ["apple", "banana", "cherry"];
+$numbers = [1, 2, 3, 4, 5];
+$mixed = ["text", 42, true];
+$range = range(1, 10);
 
-say @fruits[0];          # apple
-say @numbers[2];         # 3
-say @range[*-1];         # 10 (last element)
-say @mixed.elems;        # 3 (number of elements)
+echo $fruits[0] . PHP_EOL;       // apple
+echo $numbers[2] . PHP_EOL;      // 3
+echo $range[9] . PHP_EOL;        // 10 (last element)
+echo count($mixed) . PHP_EOL;    // 3 (number of elements)
 ```
 
-Arrays can contain any type of values and are created by listing  
-elements separated by commas. Access elements using square brackets  
-with zero-based indexing.  
+Arrays can contain any type of values and use square bracket notation  
+for both creation and access. Use `count()` to get array length and  
+`range()` to create sequences of numbers.  
 
 ## Hash creation and access
 
 Creating and working with key-value data structures.  
 
-```raku
-my %scores = Alice => 95, Bob => 87, Carol => 92;
-my %config = :host<localhost>, :port(8080), :ssl;
+```php
+<?php
+$scores = ["Alice" => 95, "Bob" => 87, "Carol" => 92];
+$config = ["host" => "localhost", "port" => 8080, "ssl" => true];
 
-say %scores<Alice>;      # 95
-say %scores{'Bob'};      # 87
-say %config<host>;       # localhost
-say %config.keys;        # (ssl host port)
+echo $scores["Alice"] . PHP_EOL;     // 95
+echo $scores["Bob"] . PHP_EOL;       // 87
+echo $config["host"] . PHP_EOL;      // localhost
+print_r(array_keys($config));        // Array keys
 ```
 
-Hashes store key-value pairs and can be created using the fat arrow  
-`=>` operator or colon notation. Access values using angle brackets  
-`<>` or curly braces `{}`.  
+Associative arrays (PHP's equivalent to hashes) store key-value pairs  
+using the `=>` operator. Access values with square brackets and string  
+keys. Use `array_keys()` and `array_values()` to get keys or values.  
 
 ## Arithmetic operations
 
 Basic mathematical operations with numbers.  
 
-```raku
-my $a = 10;
-my $b = 3;
+```php
+<?php
+$a = 10;
+$b = 3;
 
-say $a + $b;             # 13 (addition)
-say $a - $b;             # 7 (subtraction)
-say $a * $b;             # 30 (multiplication)
-say $a / $b;             # 3.333333 (division)
-say $a div $b;           # 3 (integer division)
-say $a % $b;             # 1 (modulo)
-say $a ** $b;            # 1000 (exponentiation)
+echo $a + $b . PHP_EOL;      // 13 (addition)
+echo $a - $b . PHP_EOL;      // 7 (subtraction)
+echo $a * $b . PHP_EOL;      // 30 (multiplication)
+echo $a / $b . PHP_EOL;      // 3.3333333333333 (division)
+echo intval($a / $b) . PHP_EOL;  // 3 (integer division)
+echo $a % $b . PHP_EOL;      // 1 (modulo)
+echo $a ** $b . PHP_EOL;     // 1000 (exponentiation)
 ```
 
-Raku provides all standard arithmetic operators. Division `/` returns  
-rational numbers by default, while `div` performs integer division.  
-The `**` operator is used for exponentiation.  
+PHP provides all standard arithmetic operators. Division `/` returns  
+float by default; use `intval()` or `intdiv()` for integer division.  
+The `**` operator (PHP 5.6+) performs exponentiation.  
 
 ## String operations
 
 Common operations for working with text.  
 
-```raku
-my $str1 = "Hello";
-my $str2 = "World";
+```php
+<?php
+$str1 = "Hello";
+$str2 = "World";
 
-say $str1 ~ " " ~ $str2;      # Hello World (concatenation)
-say "$str1 $str2";            # Hello World (interpolation)
-say $str1 x 3;                # HelloHelloHello (repetition)
-say $str1.chars;              # 5 (character count)
-say $str1.uc;                 # HELLO (uppercase)
-say $str2.lc;                 # world (lowercase)
+echo $str1 . " " . $str2 . PHP_EOL;      // Hello World (concatenation)
+echo "$str1 $str2" . PHP_EOL;            // Hello World (interpolation)
+echo str_repeat($str1, 3) . PHP_EOL;     // HelloHelloHello (repetition)
+echo strlen($str1) . PHP_EOL;            // 5 (character count)
+echo strtoupper($str1) . PHP_EOL;        // HELLO (uppercase)
+echo strtolower($str2) . PHP_EOL;        // world (lowercase)
 ```
 
-The `~` operator concatenates strings, `x` repeats strings, and  
-methods like `.uc` and `.lc` transform case. String interpolation  
+The `.` operator concatenates strings, `str_repeat()` repeats strings,  
+and functions like `strtoupper()` transform case. String interpolation  
 with `"$variable"` is often more readable than concatenation.  
 
 ## Comparison operators
