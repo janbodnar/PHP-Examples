@@ -1588,3 +1588,318 @@ simulateLoadTest(3);
 Performance testing randomization generates realistic load patterns,  
 response times, and system metrics. This data helps simulate various  
 conditions for stress testing and capacity planning scenarios.  
+
+## Random test data generators
+
+Creating comprehensive test data with multiple related random values.  
+
+```php
+<?php
+
+class TestDataFactory {
+    public static function randomUser(): array {
+        $firstNames = ['Alice', 'Bob', 'Carol', 'David', 'Emma', 'Frank', 'Grace'];
+        $lastNames = ['Smith', 'Jones', 'Brown', 'Davis', 'Wilson', 'Moore', 'Taylor'];
+        $domains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'];
+        
+        $firstName = $firstNames[array_rand($firstNames)];
+        $lastName = $lastNames[array_rand($lastNames)];
+        $birthYear = random_int(1950, 2005);
+        $age = date('Y') - $birthYear;
+        
+        return [
+            'id' => random_int(1000, 99999),
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'full_name' => "$firstName $lastName",
+            'email' => strtolower($firstName . '.' . $lastName . random_int(1, 999)) . '@' . $domains[array_rand($domains)],
+            'age' => $age,
+            'birth_year' => $birthYear,
+            'is_active' => random_int(0, 100) > 10, // 90% active
+            'registration_date' => date('Y-m-d', strtotime('-' . random_int(1, 1095) . ' days')),
+            'last_login' => date('Y-m-d H:i:s', strtotime('-' . random_int(0, 30) . ' days')),
+            'score' => random_int(0, 1000),
+            'level' => min(10, intval(sqrt(random_int(0, 10000))))
+        ];
+    }
+    
+    public static function randomOrder(): array {
+        $statuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+        $paymentMethods = ['credit_card', 'debit_card', 'paypal', 'bank_transfer'];
+        
+        $itemCount = random_int(1, 5);
+        $itemTotal = 0;
+        
+        for ($i = 0; $i < $itemCount; $i++) {
+            $itemTotal += random_int(999, 9999) / 100; // $9.99 to $99.99
+        }
+        
+        $tax = round($itemTotal * 0.08, 2);
+        $shipping = random_int(0, 100) > 80 ? 0 : random_int(499, 1999) / 100;
+        
+        return [
+            'order_id' => 'ORD-' . strtoupper(bin2hex(random_bytes(4))),
+            'user_id' => random_int(1000, 99999),
+            'status' => $statuses[array_rand($statuses)],
+            'payment_method' => $paymentMethods[array_rand($paymentMethods)],
+            'item_count' => $itemCount,
+            'subtotal' => round($itemTotal, 2),
+            'tax' => $tax,
+            'shipping' => $shipping,
+            'total' => round($itemTotal + $tax + $shipping, 2),
+            'order_date' => date('Y-m-d H:i:s', strtotime('-' . random_int(0, 365) . ' days')),
+            'notes' => random_int(0, 100) > 70 ? 'Special delivery instructions' : ''
+        ];
+    }
+}
+
+// Generate sample data
+$users = [];
+$orders = [];
+
+for ($i = 0; $i < 3; $i++) {
+    $users[] = TestDataFactory::randomUser();
+    $orders[] = TestDataFactory::randomOrder();
+}
+
+echo "Random Users:\n";
+foreach ($users as $i => $user) {
+    echo "  " . ($i + 1) . ". {$user['full_name']} ({$user['age']}) - {$user['email']}\n";
+    echo "     Score: {$user['score']}, Level: {$user['level']}, Active: " . ($user['is_active'] ? 'Yes' : 'No') . "\n";
+}
+
+echo "\nRandom Orders:\n";
+foreach ($orders as $i => $order) {
+    echo "  " . ($i + 1) . ". {$order['order_id']} - {$order['status']} - $" . number_format($order['total'], 2) . "\n";
+    echo "     Items: {$order['item_count']}, Payment: {$order['payment_method']}\n";
+}
+```
+
+Test data generation creates realistic datasets with proper relationships  
+and constraints. This approach ensures consistency across related fields  
+and provides comprehensive data for testing applications.  
+
+## Random media and content
+
+Generating random media references and content metadata.  
+
+```php
+<?php
+
+class RandomMediaGenerator {
+    private static array $imageTypes = ['jpg', 'png', 'gif', 'webp', 'svg'];
+    private static array $videoTypes = ['mp4', 'avi', 'mov', 'mkv', 'webm'];
+    private static array $audioTypes = ['mp3', 'wav', 'flac', 'ogg', 'aac'];
+    private static array $documentTypes = ['pdf', 'docx', 'xlsx', 'pptx', 'txt'];
+    
+    public static function randomImage(): array {
+        $width = [640, 800, 1024, 1280, 1920][array_rand([640, 800, 1024, 1280, 1920])];
+        $height = [480, 600, 768, 720, 1080][array_rand([480, 600, 768, 720, 1080])];
+        $extension = self::$imageTypes[array_rand(self::$imageTypes)];
+        
+        return [
+            'filename' => 'image_' . random_int(1000, 9999) . '.' . $extension,
+            'type' => 'image',
+            'extension' => $extension,
+            'width' => $width,
+            'height' => $height,
+            'size_bytes' => random_int(50000, 5000000),
+            'url' => 'https://example.com/images/' . bin2hex(random_bytes(8)) . '.' . $extension,
+            'alt_text' => 'Random image ' . random_int(1, 1000),
+            'created_at' => date('Y-m-d H:i:s', strtotime('-' . random_int(0, 365) . ' days'))
+        ];
+    }
+    
+    public static function randomVideo(): array {
+        $resolutions = ['720p', '1080p', '4K', '480p'];
+        $extension = self::$videoTypes[array_rand(self::$videoTypes)];
+        $duration = random_int(30, 3600); // 30 seconds to 1 hour
+        
+        return [
+            'filename' => 'video_' . random_int(1000, 9999) . '.' . $extension,
+            'type' => 'video',
+            'extension' => $extension,
+            'resolution' => $resolutions[array_rand($resolutions)],
+            'duration_seconds' => $duration,
+            'duration_formatted' => gmdate('H:i:s', $duration),
+            'size_bytes' => random_int(10000000, 1000000000),
+            'url' => 'https://example.com/videos/' . bin2hex(random_bytes(8)) . '.' . $extension,
+            'thumbnail_url' => 'https://example.com/thumbs/' . bin2hex(random_bytes(8)) . '.jpg',
+            'views' => random_int(0, 1000000),
+            'created_at' => date('Y-m-d H:i:s', strtotime('-' . random_int(0, 365) . ' days'))
+        ];
+    }
+    
+    public static function randomPlaylist(int $trackCount = null): array {
+        $trackCount = $trackCount ?? random_int(5, 20);
+        $tracks = [];
+        
+        $artists = ['Artist A', 'Band B', 'Singer C', 'Group D', 'Solo E'];
+        $genres = ['Rock', 'Pop', 'Jazz', 'Classical', 'Electronic', 'Folk'];
+        
+        for ($i = 0; $i < $trackCount; $i++) {
+            $duration = random_int(120, 360); // 2-6 minutes
+            $tracks[] = [
+                'track_number' => $i + 1,
+                'title' => 'Song ' . random_int(1, 1000),
+                'artist' => $artists[array_rand($artists)],
+                'duration_seconds' => $duration,
+                'duration_formatted' => gmdate('i:s', $duration),
+                'genre' => $genres[array_rand($genres)]
+            ];
+        }
+        
+        return [
+            'playlist_id' => 'PL-' . strtoupper(bin2hex(random_bytes(4))),
+            'name' => 'Random Playlist ' . random_int(1, 100),
+            'description' => 'A randomly generated playlist',
+            'track_count' => $trackCount,
+            'total_duration' => array_sum(array_column($tracks, 'duration_seconds')),
+            'created_at' => date('Y-m-d H:i:s', strtotime('-' . random_int(0, 90) . ' days')),
+            'tracks' => $tracks
+        ];
+    }
+}
+
+// Generate sample media
+$image = RandomMediaGenerator::randomImage();
+$video = RandomMediaGenerator::randomVideo();
+$playlist = RandomMediaGenerator::randomPlaylist(5);
+
+echo "Random Image:\n";
+echo "  {$image['filename']} - {$image['width']}x{$image['height']}\n";
+echo "  Size: " . number_format($image['size_bytes']) . " bytes\n";
+echo "  URL: {$image['url']}\n";
+
+echo "\nRandom Video:\n";
+echo "  {$video['filename']} - {$video['resolution']}\n";
+echo "  Duration: {$video['duration_formatted']}\n";
+echo "  Views: " . number_format($video['views']) . "\n";
+
+echo "\nRandom Playlist:\n";
+echo "  {$playlist['name']} - {$playlist['track_count']} tracks\n";
+echo "  Total duration: " . gmdate('H:i:s', $playlist['total_duration']) . "\n";
+echo "  First 3 tracks:\n";
+for ($i = 0; $i < min(3, count($playlist['tracks'])); $i++) {
+    $track = $playlist['tracks'][$i];
+    echo "    {$track['track_number']}. {$track['title']} - {$track['artist']} ({$track['duration_formatted']})\n";
+}
+```
+
+Random media generation creates realistic file metadata including  
+dimensions, file sizes, durations, and URLs. Useful for testing media  
+management systems, galleries, and content delivery applications.  
+
+## Random configuration and settings
+
+Creating random application configuration values and user preferences.  
+
+```php
+<?php
+
+class RandomConfigGenerator {
+    public static function randomAppConfig(): array {
+        $environments = ['development', 'staging', 'production'];
+        $logLevels = ['debug', 'info', 'warning', 'error'];
+        $cacheDrivers = ['redis', 'memcached', 'file', 'database'];
+        $databases = ['mysql', 'postgresql', 'sqlite', 'mongodb'];
+        
+        return [
+            'app' => [
+                'name' => 'RandomApp ' . random_int(1, 100),
+                'version' => random_int(1, 5) . '.' . random_int(0, 9) . '.' . random_int(0, 9),
+                'environment' => $environments[array_rand($environments)],
+                'debug' => random_int(0, 1) === 1,
+                'timezone' => ['UTC', 'America/New_York', 'Europe/London', 'Asia/Tokyo'][array_rand(['UTC', 'America/New_York', 'Europe/London', 'Asia/Tokyo'])],
+                'max_execution_time' => [30, 60, 120, 300][array_rand([30, 60, 120, 300])]
+            ],
+            'database' => [
+                'driver' => $databases[array_rand($databases)],
+                'host' => 'db' . random_int(1, 5) . '.example.com',
+                'port' => random_int(3000, 5999),
+                'pool_size' => random_int(5, 50),
+                'timeout' => random_int(5, 30)
+            ],
+            'cache' => [
+                'driver' => $cacheDrivers[array_rand($cacheDrivers)],
+                'ttl' => random_int(300, 86400), // 5 minutes to 24 hours
+                'prefix' => strtolower(bin2hex(random_bytes(3))),
+                'compress' => random_int(0, 1) === 1
+            ],
+            'logging' => [
+                'level' => $logLevels[array_rand($logLevels)],
+                'max_files' => random_int(5, 30),
+                'max_size_mb' => random_int(10, 100),
+                'rotate' => random_int(0, 1) === 1
+            ],
+            'security' => [
+                'session_timeout' => random_int(1800, 7200), // 30 minutes to 2 hours
+                'password_min_length' => random_int(8, 16),
+                'max_login_attempts' => random_int(3, 10),
+                'enable_2fa' => random_int(0, 1) === 1
+            ]
+        ];
+    }
+    
+    public static function randomUserPreferences(): array {
+        $themes = ['light', 'dark', 'auto', 'high-contrast'];
+        $languages = ['en', 'fr', 'de', 'es', 'it', 'ja', 'zh'];
+        $dateFormats = ['Y-m-d', 'Y/m/d', 'd/m/Y', 'd-m-Y', 'M d, Y'];
+        $currencies = ['USD', 'EUR', 'GBP', 'JPY', 'CAD', 'AUD'];
+        
+        return [
+            'display' => [
+                'theme' => $themes[array_rand($themes)],
+                'language' => $languages[array_rand($languages)],
+                'timezone' => 'UTC' . (random_int(0, 1) ? '+' : '-') . random_int(0, 12),
+                'date_format' => $dateFormats[array_rand($dateFormats)],
+                'items_per_page' => [10, 20, 25, 50, 100][array_rand([10, 20, 25, 50, 100])],
+                'show_tooltips' => random_int(0, 1) === 1
+            ],
+            'notifications' => [
+                'email' => random_int(0, 1) === 1,
+                'browser' => random_int(0, 1) === 1,
+                'mobile' => random_int(0, 1) === 1,
+                'marketing' => random_int(0, 3) === 3, // 25% opt-in
+                'frequency' => ['immediate', 'daily', 'weekly'][array_rand(['immediate', 'daily', 'weekly'])]
+            ],
+            'privacy' => [
+                'profile_public' => random_int(0, 2) === 2, // 33% public
+                'show_online_status' => random_int(0, 1) === 1,
+                'analytics' => random_int(0, 1) === 1,
+                'data_collection' => random_int(0, 3) === 3 // 25% opt-in
+            ],
+            'regional' => [
+                'currency' => $currencies[array_rand($currencies)],
+                'number_format' => ['1,234.56', '1.234,56', '1 234,56'][array_rand(['1,234.56', '1.234,56', '1 234,56'])],
+                'first_day_of_week' => ['monday', 'sunday'][array_rand(['monday', 'sunday'])]
+            ]
+        ];
+    }
+}
+
+// Generate sample configurations
+$appConfig = RandomConfigGenerator::randomAppConfig();
+$userPrefs = RandomConfigGenerator::randomUserPreferences();
+
+echo "Random App Configuration:\n";
+echo "  App: {$appConfig['app']['name']} v{$appConfig['app']['version']}\n";
+echo "  Environment: {$appConfig['app']['environment']}\n";
+echo "  Database: {$appConfig['database']['driver']} on {$appConfig['database']['host']}:{$appConfig['database']['port']}\n";
+echo "  Cache: {$appConfig['cache']['driver']} (TTL: {$appConfig['cache']['ttl']}s)\n";
+echo "  Security: 2FA " . ($appConfig['security']['enable_2fa'] ? 'enabled' : 'disabled') . "\n";
+
+echo "\nRandom User Preferences:\n";
+echo "  Theme: {$userPrefs['display']['theme']}\n";
+echo "  Language: {$userPrefs['display']['language']}\n";
+echo "  Timezone: {$userPrefs['display']['timezone']}\n";
+echo "  Notifications: Email " . ($userPrefs['notifications']['email'] ? 'on' : 'off');
+echo ", Browser " . ($userPrefs['notifications']['browser'] ? 'on' : 'off') . "\n";
+echo "  Privacy: Profile " . ($userPrefs['privacy']['profile_public'] ? 'public' : 'private') . "\n";
+echo "  Regional: {$userPrefs['regional']['currency']} currency\n";
+```
+
+Configuration randomization generates realistic application settings  
+and user preferences with proper constraints and relationships. This  
+helps test configuration management, user customization, and system  
+behavior under various settings combinations.
