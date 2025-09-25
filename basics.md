@@ -6,7 +6,7 @@ common PHP syntax and idioms, progressing from simple concepts to more
 sophisticated features. Each example includes clear explanations to help  
 you understand the underlying concepts and apply them in your own code.  
 
-## Hello World
+## First example
 
 The traditional first program in any language.  
 
@@ -134,14 +134,14 @@ Common operations for working with text.
 <?php
 
 $str1 = "Hello";
-$str2 = "World";
+$str2 = "there";
 
-echo $str1 . " " . $str2 . "\n";      // Hello World (concatenation)
-echo "$str1 $str2" . "\n";            // Hello World (interpolation)
+echo $str1 . " " . $str2 . "\n";      // Hello there (concatenation)
+echo "$str1 $str2" . "\n";            // Hello there (interpolation)
 echo str_repeat($str1, 3) . "\n";     // HelloHelloHello (repetition)
 echo strlen($str1) . "\n";            // 5 (character count)
 echo strtoupper($str1) . "\n";        // HELLO (uppercase)
-echo strtolower($str2) . "\n";        // world (lowercase)
+echo strtolower($str2) . "\n";        // there (lowercase)
 ```
 
 The `.` operator concatenates strings, `str_repeat()` repeats strings,  
@@ -164,7 +164,7 @@ echo ($x != $y) ? "true" : "false" . "\n";    // true (inequality)
 echo ($x < $y) ? "true" : "false" . "\n";     // true (less than)
 echo ($x > $y) ? "true" : "false" . "\n";     // false (greater than)
 echo ($str == "hello") ? "true" : "false" . "\n";  // true (equality)
-echo ($str != "world") ? "true" : "false" . "\n";  // true (inequality)
+echo ($str != "there") ? "true" : "false" . "\n";  // true (inequality)
 ```
 
 Use `==` and `!=` for loose comparisons, `===` and `!==` for strict  
