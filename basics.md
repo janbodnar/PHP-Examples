@@ -13,13 +13,11 @@ The traditional first program in any language.
 ```php
 <?php
 
-echo "Hello, there!" . PHP_EOL;
+echo "Hello, there!\n";
 ```
 
-The `echo` statement outputs text. `PHP_EOL` provides a platform-  
-independent newline. PHP scripts start with `<?php
-` tag when mixing  
-with HTML, though it's optional in pure PHP files.  
+The `echo` statement outputs text. PHP scripts start with `<?php` tag when  
+mixing with HTML, though it's optional in pure PHP files.  
 
 ## Variables
 
@@ -32,9 +30,9 @@ $name = "Alice";         // String variable
 $colors = ["red", "green", "blue"];  // Indexed array
 $person = ["name" => "Bob", "age" => 25];  // Associative array
 
-echo $name . PHP_EOL;
-echo $colors[1] . PHP_EOL;    // green
-echo $person["name"] . PHP_EOL;  // Bob
+echo $name . "\n";
+echo $colors[1] . "\n";    // green
+echo $person["name"] . "\n";  // Bob
 ```
 
 All PHP variables use the `$` prefix regardless of type. Arrays can be  
@@ -75,10 +73,10 @@ $numbers = [1, 2, 3, 4, 5];
 $mixed = ["text", 42, true];
 $range = range(1, 10);
 
-echo $fruits[0] . PHP_EOL;       // apple
-echo $numbers[2] . PHP_EOL;      // 3
-echo $range[9] . PHP_EOL;        // 10 (last element)
-echo count($mixed) . PHP_EOL;    // 3 (number of elements)
+echo $fruits[0] . "\n";       // apple
+echo $numbers[2] . "\n";      // 3
+echo $range[9] . "\n";        // 10 (last element)
+echo count($mixed) . "\n";    // 3 (number of elements)
 ```
 
 Arrays can contain any type of values and use square bracket notation  
@@ -95,9 +93,9 @@ Creating and working with key-value data structures.
 $scores = ["Alice" => 95, "Bob" => 87, "Carol" => 92];
 $config = ["host" => "localhost", "port" => 8080, "ssl" => true];
 
-echo $scores["Alice"] . PHP_EOL;     // 95
-echo $scores["Bob"] . PHP_EOL;       // 87
-echo $config["host"] . PHP_EOL;      // localhost
+echo $scores["Alice"] . "\n";     // 95
+echo $scores["Bob"] . "\n";       // 87
+echo $config["host"] . "\n";      // localhost
 print_r(array_keys($config));        // Array keys
 ```
 
@@ -115,13 +113,13 @@ Basic mathematical operations with numbers.
 $a = 10;
 $b = 3;
 
-echo $a + $b . PHP_EOL;      // 13 (addition)
-echo $a - $b . PHP_EOL;      // 7 (subtraction)
-echo $a * $b . PHP_EOL;      // 30 (multiplication)
-echo $a / $b . PHP_EOL;      // 3.3333333333333 (division)
-echo intval($a / $b) . PHP_EOL;  // 3 (integer division)
-echo $a % $b . PHP_EOL;      // 1 (modulo)
-echo $a ** $b . PHP_EOL;     // 1000 (exponentiation)
+echo $a + $b . "\n";      // 13 (addition)
+echo $a - $b . "\n";      // 7 (subtraction)
+echo $a * $b . "\n";      // 30 (multiplication)
+echo $a / $b . "\n";      // 3.3333333333333 (division)
+echo intval($a / $b) . "\n";  // 3 (integer division)
+echo $a % $b . "\n";      // 1 (modulo)
+echo $a ** $b . "\n";     // 1000 (exponentiation)
 ```
 
 PHP provides all standard arithmetic operators. Division `/` returns  
@@ -138,12 +136,12 @@ Common operations for working with text.
 $str1 = "Hello";
 $str2 = "World";
 
-echo $str1 . " " . $str2 . PHP_EOL;      // Hello World (concatenation)
-echo "$str1 $str2" . PHP_EOL;            // Hello World (interpolation)
-echo str_repeat($str1, 3) . PHP_EOL;     // HelloHelloHello (repetition)
-echo strlen($str1) . PHP_EOL;            // 5 (character count)
-echo strtoupper($str1) . PHP_EOL;        // HELLO (uppercase)
-echo strtolower($str2) . PHP_EOL;        // world (lowercase)
+echo $str1 . " " . $str2 . "\n";      // Hello World (concatenation)
+echo "$str1 $str2" . "\n";            // Hello World (interpolation)
+echo str_repeat($str1, 3) . "\n";     // HelloHelloHello (repetition)
+echo strlen($str1) . "\n";            // 5 (character count)
+echo strtoupper($str1) . "\n";        // HELLO (uppercase)
+echo strtolower($str2) . "\n";        // world (lowercase)
 ```
 
 The `.` operator concatenates strings, `str_repeat()` repeats strings,  
@@ -161,12 +159,12 @@ $x = 10;
 $y = 20;
 $str = "hello";
 
-echo ($x == $y) ? "true" : "false" . PHP_EOL;    // false (equality)
-echo ($x != $y) ? "true" : "false" . PHP_EOL;    // true (inequality)
-echo ($x < $y) ? "true" : "false" . PHP_EOL;     // true (less than)
-echo ($x > $y) ? "true" : "false" . PHP_EOL;     // false (greater than)
-echo ($str == "hello") ? "true" : "false" . PHP_EOL;  // true (equality)
-echo ($str != "world") ? "true" : "false" . PHP_EOL;  // true (inequality)
+echo ($x == $y) ? "true" : "false" . "\n";    // false (equality)
+echo ($x != $y) ? "true" : "false" . "\n";    // true (inequality)
+echo ($x < $y) ? "true" : "false" . "\n";     // true (less than)
+echo ($x > $y) ? "true" : "false" . "\n";     // false (greater than)
+echo ($str == "hello") ? "true" : "false" . "\n";  // true (equality)
+echo ($str != "world") ? "true" : "false" . "\n";  // true (inequality)
 ```
 
 Use `==` and `!=` for loose comparisons, `===` and `!==` for strict  
@@ -184,12 +182,12 @@ $a = true;
 $b = false;
 $x = 10;
 
-echo ($a && $b) ? "true" : "false" . PHP_EOL;    // false (AND)
-echo ($a || $b) ? "true" : "false" . PHP_EOL;    // true (OR)
-echo (!$a) ? "true" : "false" . PHP_EOL;         // false (NOT)
-echo ($a and $b) ? "true" : "false" . PHP_EOL;   // false (lower precedence)
-echo ($a or $b) ? "true" : "false" . PHP_EOL;    // true (lower precedence)
-echo ($x > 5 && $x < 15) ? "true" : "false" . PHP_EOL;  // true
+echo ($a && $b) ? "true" : "false" . "\n";    // false (AND)
+echo ($a || $b) ? "true" : "false" . "\n";    // true (OR)
+echo (!$a) ? "true" : "false" . "\n";         // false (NOT)
+echo ($a and $b) ? "true" : "false" . "\n";   // false (lower precedence)
+echo ($a or $b) ? "true" : "false" . "\n";    // true (lower precedence)
+echo ($x > 5 && $x < 15) ? "true" : "false" . "\n";  // true
 ```
 
 Logical operators `&&`/`and`, `||`/`or`, and `!`/`not` combine boolean  
@@ -206,15 +204,15 @@ Making decisions in your code with if/elseif/else.
 $score = 85;
 
 if ($score >= 90) {
-    echo "Excellent!" . PHP_EOL;
+    echo "Excellent!" . "\n";
 } elseif ($score >= 70) {
-    echo "Good job!" . PHP_EOL;
+    echo "Good job!" . "\n";
 } else {
-    echo "Keep trying!" . PHP_EOL;
+    echo "Keep trying!" . "\n";
 }
 
 // Ternary conditional
-echo ($score > 80) ? "High score!" : "Try harder!" . PHP_EOL;
+echo ($score > 80) ? "High score!" : "Try harder!" . "\n";
 ```
 
 Conditional statements control program flow based on boolean  
@@ -230,18 +228,18 @@ Iterating over sequences and collections.
 
 // Loop over range
 for ($i = 1; $i <= 5; $i++) {
-    echo "Number: $i" . PHP_EOL;
+    echo "Number: $i" . "\n";
 }
 
 // Loop over array
 $colors = ["red", "green", "blue"];
 foreach ($colors as $color) {
-    echo "Color: $color" . PHP_EOL;
+    echo "Color: $color" . "\n";
 }
 
 // Loop with index
 foreach ($colors as $index => $value) {
-    echo "$index: $value" . PHP_EOL;
+    echo "$index: $value" . "\n";
 }
 ```
 
@@ -258,14 +256,14 @@ Repeating code while a condition is true.
 
 $count = 0;
 while ($count < 5) {
-    echo "Count: $count" . PHP_EOL;
+    echo "Count: $count" . "\n";
     $count++;
 }
 
 // Do-while loop (executes at least once)
 $num = 10;
 do {
-    echo $num . PHP_EOL;
+    echo $num . "\n";
     $num -= 2;
 } while ($num > 0);
 ```
@@ -288,7 +286,7 @@ for ($i = 0; $i < 10; $i++) {
     if ($i % 2 === 0) {
         continue;  // Skip to next iteration
     }
-    echo "Odd number: $i" . PHP_EOL;
+    echo "Odd number: $i" . "\n";
 }
 
 // Infinite loop with explicit exit
@@ -297,7 +295,7 @@ while (true) {
     if ($input === 'quit') {
         break;
     }
-    echo "You entered: $input" . PHP_EOL;
+    echo "You entered: $input" . "\n";
 }
 ```
 
@@ -318,11 +316,11 @@ $range3 = range('a', 'z');      // letters a to z
 
 print_r(array_slice($range1, 0, 5));  // First 5 elements
 print_r($range2);                     // Odd numbers 1-9
-echo $range3[0] . $range3[1] . $range3[2] . PHP_EOL;  // abc
+echo $range3[0] . $range3[1] . $range3[2] . "\n";  // abc
 
 // Use directly in loops
 foreach (range(1, 3) as $n) {
-    echo $n . PHP_EOL;
+    echo $n . "\n";
 }
 ```
 
@@ -346,11 +344,11 @@ function add($a, $b) {
 }
 
 function sayHello() {
-    echo "Hello from function!" . PHP_EOL;
+    echo "Hello from function!" . "\n";
 }
 
-echo greet("Alice") . PHP_EOL;     // Hello, Alice!
-echo add(5, 3) . PHP_EOL;          // 8
+echo greet("Alice") . "\n";     // Hello, Alice!
+echo add(5, 3) . "\n";          // 8
 sayHello();                        // Hello from function!
 ```
 
@@ -373,7 +371,7 @@ $message = match ($day) {
     "Saturday", "Sunday" => "Weekend!",
     default => "Regular day"
 };
-echo $message . PHP_EOL;
+echo $message . "\n";
 
 // Pattern matching with numbers
 $num = 42;
@@ -382,7 +380,7 @@ $category = match (true) {
     $num >= 11 && $num <= 100 => "Medium number",
     default => "Large number"
 };
-echo $category . PHP_EOL;
+echo $category . "\n";
 ```
 
 The `match` expression (PHP 8.0+) provides powerful pattern matching.  
@@ -400,17 +398,17 @@ $text = "The year 2023 was great";
 
 // Basic matching
 if (preg_match('/\d+/', $text, $matches)) {
-    echo "Found numbers: " . $matches[0] . PHP_EOL;
+    echo "Found numbers: " . $matches[0] . "\n";
 }
 
 // Capture groups
 if (preg_match('/year\s+(\d+)/', $text, $matches)) {
-    echo "Year: " . $matches[1] . PHP_EOL;  // 2023
+    echo "Year: " . $matches[1] . "\n";  // 2023
 }
 
 // Substitution
 $newText = preg_replace('/\d+/', "2024", $text);
-echo $newText . PHP_EOL;  // The year 2024 was great
+echo $newText . "\n";  // The year 2024 was great
 ```
 
 Regular expressions use `preg_match()` for matching and store  
@@ -427,14 +425,14 @@ Reading content from files safely with error handling.
 // Read entire file
 if (file_exists("/etc/hostname")) {
     $content = file_get_contents("/etc/hostname");
-    echo "Hostname: " . trim($content) . PHP_EOL;
+    echo "Hostname: " . trim($content) . "\n";
 }
 
 // Read line by line
 if (file_exists("/etc/passwd")) {
     $lines = file("/etc/passwd", FILE_IGNORE_NEW_LINES);
     for ($i = 0; $i < min(3, count($lines)); $i++) {
-        echo "Line: " . $lines[$i] . PHP_EOL;
+        echo "Line: " . $lines[$i] . "\n";
     }
 }
 
@@ -442,7 +440,7 @@ if (file_exists("/etc/passwd")) {
 try {
     $data = file_get_contents("nonexistent.txt");
 } catch (Exception $e) {
-    echo "File not found or error reading" . PHP_EOL;
+    echo "File not found or error reading" . "\n";
 }
 ```
 
@@ -464,18 +462,18 @@ try {
         throw new DivisionByZeroError("Cannot divide by zero!");
     }
 } catch (DivisionByZeroError $e) {
-    echo "Division error: " . $e->getMessage() . PHP_EOL;
+    echo "Division error: " . $e->getMessage() . "\n";
 } catch (Exception $e) {
-    echo "Unknown error: " . $e->getMessage() . PHP_EOL;
+    echo "Unknown error: " . $e->getMessage() . "\n";
 }
 
 // Multiple exception types
 try {
     throw new InvalidArgumentException("Custom error");
 } catch (InvalidArgumentException $e) {
-    echo "Custom error caught: " . $e->getMessage() . PHP_EOL;
+    echo "Custom error caught: " . $e->getMessage() . "\n";
 } catch (Exception $e) {
-    echo "Other error: " . $e->getMessage() . PHP_EOL;
+    echo "Other error: " . $e->getMessage() . "\n";
 }
 ```
 
@@ -497,13 +495,13 @@ class Person {
     ) {}
     
     public function greet() {
-        echo "Hi, I'm {$this->name} and I'm {$this->age} years old" . PHP_EOL;
+        echo "Hi, I'm {$this->name} and I'm {$this->age} years old" . "\n";
     }
 }
 
 $person = new Person(name: "Alice", age: 30);
 $person->greet();              // Hi, I'm Alice and I'm 30 years old
-echo $person->name . PHP_EOL;  // Alice
+echo $person->name . "\n";  // Alice
 ```
 
 Classes are defined with the `class` keyword. PHP 8.0+ constructor  
@@ -520,10 +518,10 @@ Different ways to call methods on objects and strings.
 $text = "hello world";
 
 // Standard method calls on strings
-echo strtoupper($text) . PHP_EOL;     // HELLO WORLD
-echo strlen($text) . PHP_EOL;         // 11
+echo strtoupper($text) . "\n";     // HELLO WORLD
+echo strlen($text) . "\n";         // 11
 $words = explode(' ', $text);
-echo count($words) . PHP_EOL;         // 2
+echo count($words) . "\n";         // 2
 
 // Method chaining with objects
 class StringBuilder {
@@ -550,7 +548,7 @@ $result = (new StringBuilder())
     ->append("world")
     ->upper()
     ->toString();
-echo $result . PHP_EOL;  // HELLO WORLD
+echo $result . "\n";  // HELLO WORLD
 ```
 
 PHP uses function calls for string operations rather than methods.  
@@ -570,10 +568,10 @@ $sorted = $numbers;
 sort($sorted);                                // Sorts in place
 print_r($sorted);                             // [1, 2, 3, 4, 5]
 print_r(array_reverse($numbers));             // [4, 5, 2, 3, 1]
-echo count($numbers) . PHP_EOL;               // 5 (count)
-echo array_sum($numbers) . PHP_EOL;           // 15
-echo max($numbers) . PHP_EOL;                 // 5
-echo min($numbers) . PHP_EOL;                 // 1
+echo count($numbers) . "\n";               // 5 (count)
+echo array_sum($numbers) . "\n";           // 15
+echo max($numbers) . "\n";                 // 5
+echo min($numbers) . "\n";                 // 1
 
 $numbers[] = 6;                               // Add to end
 array_unshift($numbers, 0);                  // Add to beginning
@@ -597,12 +595,12 @@ $scores = ["Alice" => 95, "Bob" => 87, "Carol" => 92];
 print_r(array_keys($scores));     // [Alice, Bob, Carol]
 print_r(array_values($scores));   // [95, 87, 92]
 foreach ($scores as $name => $score) {
-    echo "$name: $score" . PHP_EOL;
+    echo "$name: $score" . "\n";
 }
 
 $scores["David"] = 88;            // Add new key-value pair
 unset($scores["Alice"]);          // Remove a key
-echo count($scores) . PHP_EOL;    // 3 (count of pairs)
+echo count($scores) . "\n";    // 3 (count of pairs)
 ```
 
 Associative arrays provide functions to access keys, values, and  
@@ -620,11 +618,11 @@ $name = "Alice";
 $age = 30;
 $hobbies = ["reading", "coding", "hiking"];
 
-echo "My name is $name" . PHP_EOL;
-echo "I am $age years old" . PHP_EOL;
-echo "Next year I'll be " . ($age + 1) . PHP_EOL;
-echo "I have " . count($hobbies) . " hobbies" . PHP_EOL;
-echo "My hobbies: " . implode(", ", $hobbies) . PHP_EOL;
+echo "My name is $name" . "\n";
+echo "I am $age years old" . "\n";
+echo "Next year I'll be " . ($age + 1) . "\n";
+echo "I have " . count($hobbies) . " hobbies" . "\n";
+echo "My hobbies: " . implode(", ", $hobbies) . "\n";
 
 // Alternative with sprintf
 printf("My name is %s and I'm %d years old\n", $name, $age);
@@ -690,8 +688,8 @@ class Calculator {
 }
 
 $calc = new Calculator();
-echo $calc->calculateTax(100.0, 0.08) . PHP_EOL;  // 8
-echo $calc->getCount() . PHP_EOL;                 // 10
+echo $calc->calculateTax(100.0, 0.08) . "\n";  // 8
+echo $calc->getCount() . "\n";                 // 10
 
 // This would cause a TypeError:
 // $calc->calculateTax("not a number", 0.08);
@@ -718,17 +716,17 @@ function process(int|string|array $input): string {
     };
 }
 
-echo process(42) . PHP_EOL;              // Processing integer: 42
-echo process("hello") . PHP_EOL;         // Processing string: hello
-echo process([1, 2, 3]) . PHP_EOL;       // Processing array with 3 elements
+echo process(42) . "\n";              // Processing integer: 42
+echo process("hello") . "\n";         // Processing string: hello
+echo process([1, 2, 3]) . "\n";       // Processing array with 3 elements
 
 // Alternative: function with optional parameters
 function connect(string $host = "localhost", int $port = 8080, bool $ssl = false): string {
     return "Connecting to $host:$port (SSL: " . ($ssl ? "true" : "false") . ")";
 }
 
-echo connect() . PHP_EOL;
-echo connect("example.com", 443, true) . PHP_EOL;
+echo connect() . "\n";
+echo connect("example.com", 443, true) . "\n";
 ```
 
 PHP doesn't have true method overloading, but union types and  
@@ -750,13 +748,13 @@ function formatMessage(string $template, ...$args): string {
     return sprintf($template, ...$args);
 }
 
-echo sum(1, 2, 3, 4, 5) . PHP_EOL;           // 15
-echo sum() . PHP_EOL;                        // 0
-echo formatMessage("Hello %s, you have %d messages", "Alice", 5) . PHP_EOL;
+echo sum(1, 2, 3, 4, 5) . "\n";           // 15
+echo sum() . "\n";                        // 0
+echo formatMessage("Hello %s, you have %d messages", "Alice", 5) . "\n";
 
 // Unpacking arrays
 $numbers = [10, 20, 30];
-echo sum(...$numbers) . PHP_EOL;             // 60
+echo sum(...$numbers) . "\n";             // 60
 ```
 
 Variadic parameters use `...` to collect remaining arguments into an  
@@ -779,12 +777,12 @@ function connect(string $host = "localhost", int $port = 8080, bool $ssl = false
     return "Connecting to $host:$port (SSL: " . ($ssl ? "true" : "false") . ")";
 }
 
-echo createUser(name: "Alice", age: 25) . PHP_EOL;
-echo connect(host: "example.com", ssl: true) . PHP_EOL;
-echo connect() . PHP_EOL;  // Uses all defaults
+echo createUser(name: "Alice", age: 25) . "\n";
+echo connect(host: "example.com", ssl: true) . "\n";
+echo connect() . "\n";  // Uses all defaults
 
 // Named arguments can be passed in any order
-echo createUser(age: 30, name: "Bob") . PHP_EOL;
+echo createUser(age: 30, name: "Bob") . "\n";
 ```
 
 Named arguments (PHP 8.0+) use parameter names with colons for  
@@ -800,7 +798,7 @@ Accessing and processing arguments passed to your script.
 
 // Basic command line argument access
 if ($argc < 2) {
-    echo "Usage: php script.php <filename> [--verbose] [--count=N]" . PHP_EOL;
+    echo "Usage: php script.php <filename> [--verbose] [--count=N]" . "\n";
     exit(1);
 }
 
@@ -815,11 +813,11 @@ foreach ($argv as $arg) {
     }
 }
 
-echo "Processing file: $filename" . PHP_EOL;
+echo "Processing file: $filename" . "\n";
 if ($verbose) {
-    echo "Verbose mode: enabled" . PHP_EOL;
+    echo "Verbose mode: enabled" . "\n";
 }
-echo "Count: $count" . PHP_EOL;
+echo "Count: $count" . "\n";
 
 // Usage examples:
 // php script.php myfile.txt
