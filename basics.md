@@ -791,14 +791,14 @@ more readable, especially with many optional parameters.
 
 ## Command line arguments
 
-Accessing and processing arguments passed to your script.  
+Accessing and processing arguments passed to your program.  
 
 ```php
 <?php
 
 // Basic command line argument access
 if ($argc < 2) {
-    echo "Usage: php script.php <filename> [--verbose] [--count=N]" . "\n";
+    echo "Usage: php main.php <filename> [--verbose] [--count=N]" . "\n";
     exit(1);
 }
 
@@ -820,9 +820,9 @@ if ($verbose) {
 echo "Count: $count" . "\n";
 
 // Usage examples:
-// php script.php myfile.txt
-// php script.php myfile.txt --verbose
-// php script.php myfile.txt --count=5 --verbose
+// php main.php myfile.txt
+// php main.php myfile.txt --verbose
+// php main.php myfile.txt --count=5 --verbose
 ```
 
 The `$argc` variable contains argument count and `$argv` contains  
