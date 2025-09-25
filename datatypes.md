@@ -1496,3 +1496,790 @@ Object types represent instances of classes. Use get_class(),
 get_object_vars(), and reflection for introspection. Objects are  
 passed by reference, so use clone for independent copies. Anonymous  
 classes provide inline object definitions for specific use cases.  
+
+## Enum types
+
+Working with enumeration types for predefined constant values.  
+
+```php
+<?php
+
+enum Status: string {
+    case PENDING = 'pending';
+    case PROCESSING = 'processing';
+    case COMPLETED = 'completed';
+    case CANCELLED = 'cancelled';
+    
+    public function getColor(): string {
+        return match($this) {
+            Status::PENDING => 'yellow',
+            Status::PROCESSING => 'blue',
+            Status::COMPLETED => 'green',
+            Status::CANCELLED => 'red'
+        };
+    }
+    
+    public function isFinished(): bool {
+        return match($this) {
+            Status::COMPLETED, Status::CANCELLED => true,
+            default => false
+        };
+    }
+}
+
+enum Priority: int {
+    case LOW = 1;
+    case MEDIUM = 2;
+    case HIGH = 3;
+    case CRITICAL = 4;
+    
+    public static function fromString(string $priority): ?self {
+        return match(strtolower($priority)) {
+            'low' => self::LOW,
+            'medium' => self::MEDIUM,
+            'high' => self::HIGH,
+            'critical' => self::CRITICAL,
+            default => null
+        };
+    }
+}
+
+enum LogLevel {
+    case DEBUG;
+    case INFO;
+    case WARNING;
+    case ERROR;
+    
+    public function getPrefix(): string {
+        return '[' . $this->name . ']';
+    }
+}
+
+function process_order(Status $status, Priority $priority): string {
+    $message = "Order is " . $status->value . " with " . $priority->name . " priority";
+    
+    if ($status->isFinished()) {
+        $message .= " (Finished)";
+    }
+    
+    return $message;
+}
+
+function log_message(LogLevel $level, string $message): string {
+    return $level->getPrefix() . ' ' . $message;
+}
+
+echo "Enum type examples:\n";
+
+// Using backed enums (with values)
+$current_status = Status::PROCESSING;
+echo "Current status: " . $current_status->value . "\n";
+echo "Status color: " . $current_status->getColor() . "\n";
+echo "Is finished: " . ($current_status->isFinished() ? "yes" : "no") . "\n";
+
+$order_priority = Priority::HIGH;
+echo "\nOrder priority: " . $order_priority->name . " (value: " . $order_priority->value . ")\n";
+
+// Process order with enums
+$order_message = process_order($current_status, $order_priority);
+echo "Order message: $order_message\n";
+
+// Using pure enums (no values)
+$log_levels = [LogLevel::DEBUG, LogLevel::INFO, LogLevel::WARNING, LogLevel::ERROR];
+echo "\nLog messages:\n";
+foreach ($log_levels as $level) {
+    echo log_message($level, "This is a " . strtolower($level->name) . " message") . "\n";
+}
+
+// Enum iteration
+echo "\nAll statuses:\n";
+foreach (Status::cases() as $status) {
+    echo "- " . $status->name . " (" . $status->value . ") [" . $status->getColor() . "]\n";
+}
+
+echo "\nAll priorities:\n";
+foreach (Priority::cases() as $priority) {
+    echo "- " . $priority->name . " = " . $priority->value . "\n";
+}
+
+// String conversion and parsing
+$priority_string = "medium";
+$parsed_priority = Priority::fromString($priority_string);
+if ($parsed_priority !== null) {
+    echo "\nParsed '$priority_string' as: " . $parsed_priority->name . "\n";
+}
+
+// Enum comparison
+$status1 = Status::COMPLETED;
+$status2 = Status::COMPLETED;
+$status3 = Status::PENDING;
+
+echo "\nEnum comparisons:\n";
+echo "COMPLETED === COMPLETED: " . ($status1 === $status2 ? "true" : "false") . "\n";
+echo "COMPLETED === PENDING: " . ($status1 === $status3 ? "true" : "false") . "\n";
+
+// Using enums in arrays
+$status_counts = [
+    Status::PENDING => 5,
+    Status::PROCESSING => 3,
+    Status::COMPLETED => 12,
+    Status::CANCELLED => 1
+];
+
+echo "\nStatus counts:\n";
+foreach ($status_counts as $status => $count) {
+    echo "  " . $status->value . ": $count\n";
+}
+```
+
+Enums provide type-safe constants with methods and properties. Backed  
+enums have scalar values, while pure enums only have names. Use  
+cases() to iterate all enum values and match expressions for  
+conditional logic based on enum values.  
+
+## Type juggling and coercion
+
+Understanding PHP's automatic type conversion in different contexts.  
+
+```php
+<?php
+
+function demonstrate_type_juggling(): void {
+    echo "String concatenation context:\n";
+    $tests = [
+        ['string', 123, 'result'],
+        [true, ' is true', 'result'],
+        [false, ' is false', 'result'],
+        [null, ' is null', 'result'],
+        [[1,2,3], ' array', 'result']
+    ];
+    
+    foreach ($tests as [$left, $right, $label]) {
+        $result = $left . $right;
+        $left_type = gettype($left);
+        echo "  " . var_export($left, true) . " ($left_type) . '$right' = '$result'\n";
+    }
+}
+
+function demonstrate_arithmetic_coercion(): void {
+    echo "\nArithmetic operation context:\n";
+    $operations = [
+        ['5', '3', '+'],
+        ['10.5', '2', '*'],
+        [true, false, '+'],
+        ['15abc', '5def', '+'],
+        [null, 10, '+'],
+        ['', 5, '*']
+    ];
+    
+    foreach ($operations as [$a, $b, $op]) {
+        $result = match($op) {
+            '+' => $a + $b,
+            '*' => $a * $b,
+            '-' => $a - $b,
+            '/' => $b != 0 ? $a / $b : 'undefined'
+        };
+        
+        $a_type = gettype($a);
+        $b_type = gettype($b);
+        echo "  " . var_export($a, true) . " ($a_type) $op " . var_export($b, true) . " ($b_type) = $result\n";
+    }
+}
+
+function demonstrate_comparison_coercion(): void {
+    echo "\nComparison context (loose vs strict):\n";
+    $comparisons = [
+        [0, false],
+        ['0', false],
+        ['', false],
+        [null, false],
+        [0, '0'],
+        [1, '1'],
+        [1, true],
+        [[], false],
+        ['10', 10]
+    ];
+    
+    foreach ($comparisons as [$a, $b]) {
+        $loose = $a == $b;
+        $strict = $a === $b;
+        $a_type = gettype($a);
+        $b_type = gettype($b);
+        
+        echo "  " . var_export($a, true) . " ($a_type) == " . var_export($b, true) . " ($b_type): ";
+        echo ($loose ? "true" : "false") . " | === : " . ($strict ? "true" : "false") . "\n";
+    }
+}
+
+function demonstrate_conditional_coercion(): void {
+    echo "\nConditional context (if statements):\n";
+    $values = [
+        0, 1, -1, 0.0, 0.1, '', '0', 'false', 'true', 
+        [], [0], null, new stdClass(), false, true
+    ];
+    
+    foreach ($values as $value) {
+        $type = gettype($value);
+        $display = match($type) {
+            'string' => "'$value'",
+            'array' => '[' . implode(',', $value) . ']',
+            'object' => 'object(' . get_class($value) . ')',
+            'boolean' => $value ? 'true' : 'false',
+            'NULL' => 'null',
+            default => (string) $value
+        };
+        
+        $truthiness = $value ? 'truthy' : 'falsy';
+        echo "  $display ($type) is $truthiness\n";
+    }
+}
+
+function demonstrate_function_parameter_coercion(): void {
+    echo "\nFunction parameter type coercion:\n";
+    
+    // Function with type declarations
+    function typed_function(int $number, string $text, bool $flag): string {
+        return "Number: $number, Text: '$text', Flag: " . ($flag ? 'true' : 'false');
+    }
+    
+    $test_cases = [
+        ['5', 'hello', 1],           // String to int, int to bool
+        [3.14, 42, 'yes'],          // Float to int, int to string, string to bool
+        [true, [], null]            // Bool to int, array to string, null to bool
+    ];
+    
+    foreach ($test_cases as $i => [$num, $str, $bool]) {
+        try {
+            $result = typed_function($num, $str, $bool);
+            echo "  Test $i: $result\n";
+            echo "    Input types: " . gettype($num) . ", " . gettype($str) . ", " . gettype($bool) . "\n";
+        } catch (TypeError $e) {
+            echo "  Test $i: Type error - " . $e->getMessage() . "\n";
+        }
+    }
+}
+
+function demonstrate_array_key_coercion(): void {
+    echo "\nArray key type coercion:\n";
+    
+    $array = [];
+    
+    // Different key types that get coerced
+    $keys = [
+        1,           // int
+        '1',         // string that looks like int
+        1.8,         // float
+        true,        // bool
+        false,       // bool
+        null,        // null
+        'hello'      // regular string
+    ];
+    
+    foreach ($keys as $i => $key) {
+        $original_type = gettype($key);
+        $array[$key] = "Value for key " . var_export($key, true) . " ($original_type)";
+    }
+    
+    echo "  Original key types vs actual array keys:\n";
+    foreach ($array as $actual_key => $value) {
+        $actual_type = gettype($actual_key);
+        echo "    [$actual_key] ($actual_type) = $value\n";
+    }
+    
+    echo "  Array has " . count($array) . " elements (some keys were overwritten)\n";
+}
+
+echo "Type juggling and coercion examples:\n";
+demonstrate_type_juggling();
+demonstrate_arithmetic_coercion();
+demonstrate_comparison_coercion();
+demonstrate_conditional_coercion();
+demonstrate_function_parameter_coercion();
+demonstrate_array_key_coercion();
+
+echo "\nType coercion rules summary:\n";
+echo "- String context: All types convert to string representation\n";
+echo "- Numeric context: Strings with leading numbers are converted\n";
+echo "- Boolean context: Empty values become false, non-empty become true\n";
+echo "- Comparison: Loose (==) allows coercion, strict (===) requires exact match\n";
+echo "- Array keys: Strings that look like integers become integers\n";
+echo "- Function parameters: Type hints trigger automatic conversion when possible\n";
+```
+
+Type juggling is PHP's automatic type conversion based on context.  
+Understanding these rules prevents unexpected behavior. Use strict  
+comparison (===) and type declarations to reduce implicit conversions  
+when type safety is important.  
+
+## Strict types mode
+
+Using strict_types declaration for type safety.  
+
+```php
+<?php
+declare(strict_types=1);
+
+// With strict types, no automatic type conversion occurs
+function strict_add(int $a, int $b): int {
+    return $a + $b;
+}
+
+function strict_concat(string $first, string $second): string {
+    return $first . ' ' . $second;
+}
+
+function strict_process_user(?string $name, int $age): array {
+    if ($name === null) {
+        $name = 'Anonymous';
+    }
+    
+    return [
+        'name' => $name,
+        'age' => $age,
+        'is_adult' => $age >= 18
+    ];
+}
+
+class StrictCalculator {
+    private float $precision;
+    
+    public function __construct(float $precision = 2.0) {
+        $this->precision = $precision;
+    }
+    
+    public function divide(float $dividend, float $divisor): float {
+        if ($divisor === 0.0) {
+            throw new InvalidArgumentException("Division by zero");
+        }
+        return round($dividend / $divisor, (int)$this->precision);
+    }
+    
+    public function percentage(float $value, float $total): float {
+        return $this->divide($value * 100.0, $total);
+    }
+}
+
+function demonstrate_strict_vs_non_strict(): void {
+    echo "Strict types demonstration:\n";
+    
+    // These will work with proper types
+    echo "Valid calls:\n";
+    echo "  strict_add(5, 3) = " . strict_add(5, 3) . "\n";
+    echo "  strict_concat('Hello', 'World') = " . strict_concat('Hello', 'World') . "\n";
+    
+    $user_data = strict_process_user('Alice', 25);
+    echo "  User data: " . json_encode($user_data) . "\n";
+    
+    // Calculator with strict types
+    $calc = new StrictCalculator(3.0);
+    echo "  Calculator 10/3 = " . $calc->divide(10.0, 3.0) . "\n";
+    echo "  Percentage 75/150 = " . $calc->percentage(75.0, 150.0) . "%\n";
+    
+    // These would cause TypeErrors with strict_types=1
+    echo "\nCalls that would fail with strict types:\n";
+    
+    $problematic_calls = [
+        ['strict_add', ['5', '3']],              // Strings instead of ints
+        ['strict_concat', [123, 456]],           // Ints instead of strings
+        ['strict_process_user', ['Bob', '30']],  // String age instead of int
+    ];
+    
+    foreach ($problematic_calls as [$function, $args]) {
+        try {
+            $result = call_user_func_array($function, $args);
+            echo "  $function with args " . json_encode($args) . " = $result\n";
+        } catch (TypeError $e) {
+            $arg_types = implode(', ', array_map('gettype', $args));
+            echo "  $function with ($arg_types) -> TypeError: " . $e->getMessage() . "\n";
+        }
+    }
+}
+
+function type_safety_benefits(): void {
+    echo "\nBenefits of strict types:\n";
+    
+    // Example showing how strict types catch errors early
+    function calculate_discount(float $price, float $discount_rate): float {
+        if ($discount_rate < 0.0 || $discount_rate > 1.0) {
+            throw new InvalidArgumentException("Discount rate must be between 0 and 1");
+        }
+        return $price * (1.0 - $discount_rate);
+    }
+    
+    $products = [
+        ['name' => 'Laptop', 'price' => 999.99, 'discount' => 0.15],
+        ['name' => 'Mouse', 'price' => '29.99', 'discount' => '0.1'],  // Wrong types
+        ['name' => 'Keyboard', 'price' => 79.99, 'discount' => 0.05]
+    ];
+    
+    foreach ($products as $product) {
+        try {
+            $final_price = calculate_discount($product['price'], $product['discount']);
+            echo "  " . $product['name'] . ": $" . number_format($final_price, 2) . "\n";
+        } catch (TypeError $e) {
+            echo "  " . $product['name'] . ": Type error - " . $e->getMessage() . "\n";
+        }
+    }
+}
+
+function strict_types_with_unions(): void {
+    echo "\nStrict types with union types:\n";
+    
+    function format_id(int|string $id): string {
+        return match(true) {
+            is_int($id) => sprintf("ID-%06d", $id),
+            is_string($id) => "REF-" . strtoupper($id),
+        };
+    }
+    
+    $ids = [123, "abc", 999, "xyz123"];
+    
+    foreach ($ids as $id) {
+        $formatted = format_id($id);
+        echo "  " . gettype($id) . " '$id' -> '$formatted'\n";
+    }
+    
+    // This would still fail - wrong type
+    try {
+        $bad_result = format_id(12.34);  // Float not allowed
+        echo "  Float accepted: $bad_result\n";
+    } catch (TypeError $e) {
+        echo "  Float rejected: " . $e->getMessage() . "\n";
+    }
+}
+
+function migration_strategy(): void {
+    echo "\nMigration strategy for existing code:\n";
+    echo "1. Add declare(strict_types=1) to new files\n";
+    echo "2. Add type declarations gradually\n";
+    echo "3. Test thoroughly - strict types change behavior\n";
+    echo "4. Use union types for flexibility where needed\n";
+    echo "5. Consider nullable types (?type) for optional values\n";
+    echo "6. Use mixed type for legacy compatibility\n";
+    
+    // Example: gradual typing
+    function legacy_function($data) {
+        // Old untyped function
+        return is_string($data) ? strtoupper($data) : (string)$data;
+    }
+    
+    function improved_function(string|int|float $data): string {
+        // Improved with union type
+        return is_string($data) ? strtoupper($data) : (string)$data;
+    }
+    
+    function strict_function(string $data): string {
+        // Fully strict version
+        return strtoupper($data);
+    }
+    
+    $test_value = "hello world";
+    echo "\nEvolution of a function:\n";
+    echo "  Legacy: " . legacy_function($test_value) . "\n";
+    echo "  Improved: " . improved_function($test_value) . "\n";
+    echo "  Strict: " . strict_function($test_value) . "\n";
+}
+
+demonstrate_strict_vs_non_strict();
+type_safety_benefits();
+strict_types_with_unions();
+migration_strategy();
+```
+
+Strict types mode (declare(strict_types=1)) disables automatic type  
+coercion, making PHP behave more like statically typed languages.  
+This catches type errors early and makes code more predictable. Use  
+with union types and nullable types for flexibility while maintaining  
+type safety.  
+
+## Advanced type patterns
+
+Complex type handling patterns and best practices.  
+
+```php
+<?php
+
+// Generic-like behavior with mixed types and validation
+class TypedCollection {
+    private array $items = [];
+    private string $type;
+    
+    public function __construct(string $type) {
+        if (!in_array($type, ['string', 'int', 'float', 'bool', 'array', 'object'])) {
+            throw new InvalidArgumentException("Unsupported type: $type");
+        }
+        $this->type = $type;
+    }
+    
+    public function add(mixed $item): void {
+        if (!$this->isValidType($item)) {
+            $actual_type = gettype($item);
+            throw new TypeError("Expected {$this->type}, got $actual_type");
+        }
+        $this->items[] = $item;
+    }
+    
+    public function getAll(): array {
+        return $this->items;
+    }
+    
+    public function count(): int {
+        return count($this->items);
+    }
+    
+    public function filter(callable $predicate): self {
+        $filtered = new self($this->type);
+        foreach ($this->items as $item) {
+            if ($predicate($item)) {
+                $filtered->add($item);
+            }
+        }
+        return $filtered;
+    }
+    
+    private function isValidType(mixed $value): bool {
+        return match($this->type) {
+            'string' => is_string($value),
+            'int' => is_int($value),
+            'float' => is_float($value),
+            'bool' => is_bool($value),
+            'array' => is_array($value),
+            'object' => is_object($value),
+        };
+    }
+}
+
+// Type-safe builder pattern
+class QueryBuilder {
+    private array $select = [];
+    private ?string $from = null;
+    private array $where = [];
+    private array $orderBy = [];
+    private ?int $limit = null;
+    
+    public function select(string ...$columns): self {
+        $this->select = array_merge($this->select, $columns);
+        return $this;
+    }
+    
+    public function from(string $table): self {
+        $this->from = $table;
+        return $this;
+    }
+    
+    public function where(string $column, string $operator, string|int|float $value): self {
+        $this->where[] = compact('column', 'operator', 'value');
+        return $this;
+    }
+    
+    public function orderBy(string $column, string $direction = 'ASC'): self {
+        if (!in_array(strtoupper($direction), ['ASC', 'DESC'])) {
+            throw new InvalidArgumentException("Direction must be ASC or DESC");
+        }
+        $this->orderBy[] = ['column' => $column, 'direction' => strtoupper($direction)];
+        return $this;
+    }
+    
+    public function limit(int $count): self {
+        if ($count <= 0) {
+            throw new InvalidArgumentException("Limit must be positive");
+        }
+        $this->limit = $count;
+        return $this;
+    }
+    
+    public function build(): string {
+        if (empty($this->select)) {
+            throw new RuntimeException("SELECT columns are required");
+        }
+        if ($this->from === null) {
+            throw new RuntimeException("FROM table is required");
+        }
+        
+        $sql = "SELECT " . implode(', ', $this->select);
+        $sql .= " FROM " . $this->from;
+        
+        if (!empty($this->where)) {
+            $conditions = array_map(
+                fn($w) => "{$w['column']} {$w['operator']} " . $this->formatValue($w['value']),
+                $this->where
+            );
+            $sql .= " WHERE " . implode(' AND ', $conditions);
+        }
+        
+        if (!empty($this->orderBy)) {
+            $orders = array_map(
+                fn($o) => "{$o['column']} {$o['direction']}",
+                $this->orderBy
+            );
+            $sql .= " ORDER BY " . implode(', ', $orders);
+        }
+        
+        if ($this->limit !== null) {
+            $sql .= " LIMIT " . $this->limit;
+        }
+        
+        return $sql;
+    }
+    
+    private function formatValue(string|int|float $value): string {
+        return is_string($value) ? "'$value'" : (string)$value;
+    }
+}
+
+// Type-safe result wrapper
+class Result {
+    private function __construct(
+        private mixed $value,
+        private ?string $error
+    ) {}
+    
+    public static function success(mixed $value): self {
+        return new self($value, null);
+    }
+    
+    public static function failure(string $error): self {
+        return new self(null, $error);
+    }
+    
+    public function isSuccess(): bool {
+        return $this->error === null;
+    }
+    
+    public function isFailure(): bool {
+        return $this->error !== null;
+    }
+    
+    public function getValue(): mixed {
+        if ($this->isFailure()) {
+            throw new RuntimeException("Cannot get value from failed result: " . $this->error);
+        }
+        return $this->value;
+    }
+    
+    public function getError(): string {
+        if ($this->isSuccess()) {
+            throw new RuntimeException("Cannot get error from successful result");
+        }
+        return $this->error;
+    }
+    
+    public function map(callable $transformer): self {
+        if ($this->isFailure()) {
+            return $this;
+        }
+        
+        try {
+            $newValue = $transformer($this->value);
+            return self::success($newValue);
+        } catch (Throwable $e) {
+            return self::failure($e->getMessage());
+        }
+    }
+    
+    public function flatMap(callable $transformer): self {
+        if ($this->isFailure()) {
+            return $this;
+        }
+        
+        try {
+            return $transformer($this->value);
+        } catch (Throwable $e) {
+            return self::failure($e->getMessage());
+        }
+    }
+}
+
+function safe_divide(float $dividend, float $divisor): Result {
+    if ($divisor === 0.0) {
+        return Result::failure("Division by zero");
+    }
+    return Result::success($dividend / $divisor);
+}
+
+function safe_parse_json(string $json): Result {
+    $decoded = json_decode($json, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        return Result::failure("Invalid JSON: " . json_last_error_msg());
+    }
+    return Result::success($decoded);
+}
+
+echo "Advanced type patterns:\n";
+
+// Typed collection example
+echo "\n1. Typed Collection:\n";
+$strings = new TypedCollection('string');
+$strings->add("hello");
+$strings->add("world");
+$strings->add("PHP");
+
+echo "String collection: " . json_encode($strings->getAll()) . "\n";
+
+$long_strings = $strings->filter(fn($s) => strlen($s) > 4);
+echo "Long strings: " . json_encode($long_strings->getAll()) . "\n";
+
+try {
+    $strings->add(123);  // This should fail
+} catch (TypeError $e) {
+    echo "Type error caught: " . $e->getMessage() . "\n";
+}
+
+// Query builder example
+echo "\n2. Type-safe Query Builder:\n";
+$query = (new QueryBuilder())
+    ->select('name', 'email', 'age')
+    ->from('users')
+    ->where('age', '>=', 18)
+    ->where('status', '=', 'active')
+    ->orderBy('name', 'ASC')
+    ->limit(10)
+    ->build();
+
+echo "Generated SQL: $query\n";
+
+// Result wrapper example
+echo "\n3. Type-safe Result Wrapper:\n";
+$division_result = safe_divide(10.0, 3.0);
+if ($division_result->isSuccess()) {
+    echo "Division result: " . $division_result->getValue() . "\n";
+}
+
+$zero_division = safe_divide(10.0, 0.0);
+if ($zero_division->isFailure()) {
+    echo "Division error: " . $zero_division->getError() . "\n";
+}
+
+// Chain operations with Result
+$json_string = '{"name": "Alice", "age": 30}';
+$parse_result = safe_parse_json($json_string)
+    ->map(fn($data) => $data['name'])
+    ->map(fn($name) => strtoupper($name));
+
+if ($parse_result->isSuccess()) {
+    echo "Processed name: " . $parse_result->getValue() . "\n";
+}
+
+$invalid_json_result = safe_parse_json('invalid json')
+    ->map(fn($data) => $data['name'])
+    ->map(fn($name) => strtoupper($name));
+
+if ($invalid_json_result->isFailure()) {
+    echo "JSON processing failed: " . $invalid_json_result->getError() . "\n";
+}
+
+// Type pattern best practices
+echo "\n4. Best Practices Summary:\n";
+echo "- Use typed collections for homogeneous data\n";
+echo "- Implement fluent interfaces with proper return types\n";
+echo "- Wrap risky operations in Result types\n";
+echo "- Validate input types early and explicitly\n";
+echo "- Use union types for flexibility, strict types for safety\n";
+echo "- Document complex type relationships\n";
+echo "- Consider immutability for shared data structures\n";
+```
+
+Advanced type patterns include typed collections, fluent builders,  
+and result wrappers. These patterns provide type safety while  
+maintaining flexibility. Use them to create robust APIs that catch  
+errors early and provide clear feedback about type mismatches.
