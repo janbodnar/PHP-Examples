@@ -15,6 +15,19 @@ sudo apt update
 sudo apt install php8.4-cli php8.4-fpm
 ```
 
+VS Code formatter
+
+`composer global require friendsofphp/php-cs-fixer`
+
+Extension *php cs fixer*
+
+```json
+"php-cs-fixer.executablePath": "/home/jano/.config/composer/vendor/bin/php-cs-fixer",
+"[php]": {
+    "editor.defaultFormatter": "junstyle.php-cs-fixer"
+},
+```
+
 Composer & Symfony
 
 ```
