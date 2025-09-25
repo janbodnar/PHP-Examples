@@ -12,11 +12,13 @@ The traditional first program in any language.
 
 ```php
 <?php
-echo "Hello, World!" . PHP_EOL;
+
+echo "Hello, there!" . PHP_EOL;
 ```
 
 The `echo` statement outputs text. `PHP_EOL` provides a platform-  
-independent newline. PHP scripts start with `<?php` tag when mixing  
+independent newline. PHP scripts start with `<?php
+` tag when mixing  
 with HTML, though it's optional in pure PHP files.  
 
 ## Variables
@@ -25,6 +27,7 @@ PHP variables are prefixed with the dollar sign ($).
 
 ```php
 <?php
+
 $name = "Alice";         // String variable
 $colors = ["red", "green", "blue"];  // Indexed array
 $person = ["name" => "Bob", "age" => 25];  // Associative array
@@ -44,6 +47,7 @@ PHP's fundamental data types for different kinds of values.
 
 ```php
 <?php
+
 $text = "Hello";         // string
 $number = 42;            // int
 $decimal = 3.14;         // float
@@ -65,6 +69,7 @@ Different ways to create and access array elements.
 
 ```php
 <?php
+
 $fruits = ["apple", "banana", "cherry"];
 $numbers = [1, 2, 3, 4, 5];
 $mixed = ["text", 42, true];
@@ -86,6 +91,7 @@ Creating and working with key-value data structures.
 
 ```php
 <?php
+
 $scores = ["Alice" => 95, "Bob" => 87, "Carol" => 92];
 $config = ["host" => "localhost", "port" => 8080, "ssl" => true];
 
@@ -105,6 +111,7 @@ Basic mathematical operations with numbers.
 
 ```php
 <?php
+
 $a = 10;
 $b = 3;
 
@@ -127,6 +134,7 @@ Common operations for working with text.
 
 ```php
 <?php
+
 $str1 = "Hello";
 $str2 = "World";
 
@@ -148,6 +156,7 @@ Comparing values for equality and ordering.
 
 ```php
 <?php
+
 $x = 10;
 $y = 20;
 $str = "hello";
@@ -170,6 +179,7 @@ Combining boolean expressions with logical operations.
 
 ```php
 <?php
+
 $a = true;
 $b = false;
 $x = 10;
@@ -192,6 +202,7 @@ Making decisions in your code with if/elseif/else.
 
 ```php
 <?php
+
 $score = 85;
 
 if ($score >= 90) {
@@ -216,6 +227,7 @@ Iterating over sequences and collections.
 
 ```php
 <?php
+
 // Loop over range
 for ($i = 1; $i <= 5; $i++) {
     echo "Number: $i" . PHP_EOL;
@@ -243,6 +255,7 @@ Repeating code while a condition is true.
 
 ```php
 <?php
+
 $count = 0;
 while ($count < 5) {
     echo "Count: $count" . PHP_EOL;
@@ -267,6 +280,7 @@ Controlling loop execution with break and continue statements.
 
 ```php
 <?php
+
 for ($i = 0; $i < 10; $i++) {
     if ($i === 5) {
         break;  // Exit loop completely
@@ -297,6 +311,7 @@ Generating sequences of consecutive values.
 
 ```php
 <?php
+
 $range1 = range(1, 10);         // 1 to 10 inclusive
 $range2 = range(1, 10, 2);      // 1, 3, 5, 7, 9 (step of 2)
 $range3 = range('a', 'z');      // letters a to z
@@ -321,6 +336,7 @@ Creating reusable functions to organize code.
 
 ```php
 <?php
+
 function greet($name) {
     return "Hello, $name!";
 }
@@ -348,6 +364,7 @@ Elegant alternative to long if/elseif chains using PHP 8.0+ match.
 
 ```php
 <?php
+
 $day = "Monday";
 
 $message = match ($day) {
@@ -378,6 +395,7 @@ Pattern matching and text processing with regex.
 
 ```php
 <?php
+
 $text = "The year 2023 was great";
 
 // Basic matching
@@ -405,6 +423,7 @@ Reading content from files safely with error handling.
 
 ```php
 <?php
+
 // Read entire file
 if (file_exists("/etc/hostname")) {
     $content = file_get_contents("/etc/hostname");
@@ -437,6 +456,7 @@ Managing errors gracefully with try/catch blocks.
 
 ```php
 <?php
+
 // Basic exception handling
 try {
     $result = 10 / 0;  // Generates warning but returns INF
@@ -469,6 +489,7 @@ Creating simple classes with properties and methods.
 
 ```php
 <?php
+
 class Person {
     public function __construct(
         public string $name,
@@ -495,6 +516,7 @@ Different ways to call methods on objects and strings.
 
 ```php
 <?php
+
 $text = "hello world";
 
 // Standard method calls on strings
@@ -541,6 +563,7 @@ Essential operations for working with arrays.
 
 ```php
 <?php
+
 $numbers = [1, 3, 2, 5, 4];
 
 $sorted = $numbers;
@@ -568,6 +591,7 @@ Working with associative array data structures efficiently.
 
 ```php
 <?php
+
 $scores = ["Alice" => 95, "Bob" => 87, "Carol" => 92];
 
 print_r(array_keys($scores));     // [Alice, Bob, Carol]
@@ -591,6 +615,7 @@ Embedding expressions within strings for dynamic content.
 
 ```php
 <?php
+
 $name = "Alice";
 $age = 30;
 $hobbies = ["reading", "coding", "hiking"];
@@ -616,6 +641,7 @@ Using array_map, array_filter, and array transformations.
 
 ```php
 <?php
+
 $numbers = range(1, 10);
 
 // Transform with array_map
@@ -643,6 +669,7 @@ Adding type safety with explicit type declarations.
 
 ```php
 <?php
+
 // PHP 8.0+ typed properties
 class Calculator {
     public function __construct(
@@ -680,6 +707,7 @@ Achieving flexible function behavior through different approaches.
 
 ```php
 <?php
+
 // Using union types (PHP 8.0+)
 function process(int|string|array $input): string {
     return match (gettype($input)) {
@@ -713,6 +741,7 @@ Functions that accept variable numbers of arguments.
 
 ```php
 <?php
+
 function sum(...$numbers): int|float {
     return array_sum($numbers);
 }
@@ -740,6 +769,7 @@ Functions with labeled arguments for clarity and flexibility.
 
 ```php
 <?php
+
 // PHP 8.0+ named arguments
 function createUser(string $name, int $age = 18, bool $active = true): string {
     return "User: $name, Age: $age, Active: " . ($active ? "true" : "false");
@@ -767,6 +797,7 @@ Accessing and processing arguments passed to your script.
 
 ```php
 <?php
+
 // Basic command line argument access
 if ($argc < 2) {
     echo "Usage: php script.php <filename> [--verbose] [--count=N]" . PHP_EOL;
